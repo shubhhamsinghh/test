@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Sub_Category;
 use App\Models\Product;
+use App\Models\Cat_Description;
+use App\Models\Cat_Des_Images;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -85,7 +87,8 @@ class AdminController extends Controller
         $category->cat_name = $request->cat_name;
         $category->cat_url = $str_url;
         $category->cat_image = $filename1;
-        $category->image_alt = $request->image_alt;
+        $category->cat_description = $request->cat_description;
+        $category->cat_meta = $request->cat_meta;
         $category->save();
         $request->session()->flash('response_msg', 'Category added successfully !!'); //success,info,error,warning
         $request->session()->flash('response_type', 'success');
@@ -117,7 +120,8 @@ class AdminController extends Controller
         DB::table('category')->where('id', $id)->update([
             'cat_name' => $request->input('cat_name'),
             'cat_url' => $str_url,
-            'image_alt' => $request->input('image_alt'),
+            'cat_description' => $request->input('cat_description'),
+            'cat_meta' => $request->input('cat_meta'),
         ]);
 
         $filename = '';
@@ -137,16 +141,84 @@ class AdminController extends Controller
                 $request->file('cat_image')->move($destinationpath, $filename1);
 
                 $data = DB::table('category')->where(['id' => $id])->select('cat_image')->first();
-                $image_path = 'images/category/' . $data->cat_image;
+                $image_path = asset('images/category/' . $data->cat_image);
                 if (File::exists($image_path)) {
                     File::delete($image_path);
                 }
+                File::delete($image_path);
 
                 DB::table('category')->where('id', $id)->update(['cat_image' => $filename1]);
             }
         }
 
         $request->session()->flash('response_msg', 'Category updated successfully !!'); //success,info,error,warning
+        $request->session()->flash('response_type', 'success');
+        return redirect()->back();
+    }
+
+    public function category_detail($url)
+    {
+        $cat = DB::table('category')->where('cat_url',$url)->first();
+        $data = Cat_Description::with('category','cat_images')->where('category_id',$cat->id)->orderByDesc('id')->get();
+        return view('admin_pages.category-detail', compact('data'));
+    }
+    public function category_detail_add(Request $request)
+    {
+      
+        $str_url = strtolower($request->cat_dec_heading);
+        $str_url = preg_replace("/[^a-z0-9\s-]/", "", $str_url);
+        $str_url = preg_replace("/[\s-]+/", "-", $str_url); 
+        $str_url = preg_replace("/[\s_]/", "-", $str_url);
+
+        $filename = '';
+        $filename1 = '';
+        $destinationpath = 'images/category/';
+        if (request()->file('cat_des_image') != '' || request()->file('cat_des_image') != null) {
+            if (request()->file('cat_des_image')->isValid()) {
+                $file = request()->file('cat_des_image')->getClientOriginalName();
+                $filename = pathinfo($file, PATHINFO_FILENAME);
+                $filename = strtolower($filename);
+                $filename = preg_replace("/[^a-z0-9_\s-]/", "", $filename);
+                $filename = preg_replace("/[\s-]+/", " ", $filename);
+                $filename = preg_replace("/[\s_]/", "-", $filename);
+                $extension1 = request()->file('cat_des_image')->getClientOriginalExtension();
+                $filename1 = $filename . '_' . rand(11111, 99999) . '.' . $extension1;
+                request()->file('cat_des_image')->move($destinationpath, $filename1);
+            }
+        }
+
+        $data = new Cat_Description();
+        $data->category_id = $request->category_id;
+        $data->cat_dec_heading = $request->cat_dec_heading;
+        $data->cat_dec_url = $str_url;
+        $data->cat_des_image = $filename1;
+        $data->cat_dec_description = $request->cat_dec_description;
+        $data->cat_dec_meta = $request->cat_dec_meta;
+        $data->save();
+
+        $filename_1 = '';
+        $filename_11 = '';
+        $destinationpath_1 = 'images/category-detail/';
+        if (request()->file('cat_des_cimg') != '' || request()->file('cat_des_cimg') != null) {
+            // if (request()->file('cat_des_cimg')->isValid()) {
+                foreach ($request->file('cat_des_cimg') as $fl) {
+                    $file = $fl->getClientOriginalName();
+                    $filename_1 = pathinfo($file, PATHINFO_FILENAME);
+                    $filename_1 = strtolower($filename_1);
+                    $filename_1 = preg_replace("/[^a-z0-9_\s-]/", "", $filename_1);
+                    $filename_1 = preg_replace("/[\s-]+/", " ", $filename_1);
+                    $filename_1 = preg_replace("/[\s_]/", "-", $filename_1);
+                    $extension1 = $fl->getClientOriginalExtension();
+                    $filename_11 = $filename_1 . '_' . rand(11111, 99999) . '.' . $extension1;
+                    $fl->move($destinationpath_1, $filename_11);
+                    DB::table('cat_des_images')->insert(['category_id' => $request->category_id, 'cat_des_id' => $data->id, 'cat_des_cimg' => $filename_11]);
+                }
+            // }
+        }
+
+        dd($data);
+
+        $request->session()->flash('response_msg', 'Category Detail added successfully !!'); //success,info,error,warning
         $request->session()->flash('response_type', 'success');
         return redirect()->back();
     }

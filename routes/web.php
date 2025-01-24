@@ -30,9 +30,12 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/home', [AdminController::class, 'index'])->name('home');
     //=========== Category Route ======================
     Route::get('/category', [AdminController::class, 'category'])->name('category');
-    Route::post('/category_add', [AdminController::class, 'category_add'])->name('category_add');
-    Route::post('/category_update', [AdminController::class, 'category_update'])->name('category_update');
-    Route::get('/category_delete/{id}', [AdminController::class, 'category_delete'])->name('category_delete');
+    Route::post('/category-add', [AdminController::class, 'category_add'])->name('category_add');
+    Route::post('/category-update', [AdminController::class, 'category_update'])->name('category_update');
+    Route::get('/category-delete/{id}', [AdminController::class, 'category_delete'])->name('category_delete');
+    Route::post('/category-detail-add', [AdminController::class, 'category_detail_add'])->name('category_detail_add');
+    Route::post('/category-detail-edit/{id}', [AdminController::class, 'category_detail_update'])->name('category_detail_update');
+    Route::get('/category-detail/{url}', [AdminController::class, 'category_detail'])->name('category_detail');
     
     //=========== Sub-Category Route ======================
     Route::get('/sub_category', [AdminController::class, 'sub_category'])->name('sub_category');

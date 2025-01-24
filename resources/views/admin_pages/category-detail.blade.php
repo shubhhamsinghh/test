@@ -7,12 +7,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Category</h1>
+                        <h1>Category Detail [{{$data->category->cat_name}}]</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-                            <li class="breadcrumb-item active">Category</li>
+                            <li class="breadcrumb-item active">Category Detail [{{$data->category->cat_name}}]</li>
                         </ol>
                     </div>
                 </div>
@@ -26,14 +26,14 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title color-red"><b>Category Info</b></h3>
+                                <h3 class="card-title color-red"><b>Category Detail Info</b></h3>
                                 <div class="card-tools">
-                                    <ul class="nav nav-pills ml-auto">
+                                    <!-- <ul class="nav nav-pills ml-auto">
                                         <li class="nav-item">
                                             <a class="nav-link active" data-toggle="modal" role="button"
                                                 data-target="#addcategory"><i class="fas fa-plus"></i> Add New</a>
                                         </li>
-                                    </ul>
+                                    </ul> -->
                                 </div>
                             </div>
                             <!-- /.card-header -->
@@ -42,7 +42,7 @@
                                     <thead>
                                         <tr>
                                             <th width="30">#</th>
-                                            <th>Name</th>
+                                            <th>Heading</th>
                                             <th>Image</th>
                                             <th>
                                                 <center>Action</center>
@@ -50,12 +50,13 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($categories as $key => $category)
+                                        @foreach ($data as $key => $category)
                                             <tr>
                                                 <td>{{ ++$key }}</td>
                                                 <td>{{ $category->cat_name }}</td>
-                                                <td><img src="{{ asset('images/category/' . $category->cat_image) }}"
+                                                <td><img src="{{ asset('images/category-detail/' . $category->cat_des_image) }}"
                                                         style="height:100px;"></td>
+                                                <td>{{ $category->image_alt }}</td>
                                                 <td>
                                                     <center>
                                                         <button class="btn btn-warning btn-sm color-white"
@@ -66,12 +67,6 @@
                                                             href="{{ route('category_delete', ['id' => $category->id]) }}"
                                                             onclick="return confirm('Are you sure to delete?')"><i
                                                                 class="fas fa-trash"></i></a>
-                                                        <a class="btn btn-primary btn-sm color-white"
-                                                            href="{{route('category_detail',['url' => $category->cat_url])}}" ><i
-                                                                class="fas fa-eye"></i></a>
-                                                        <button class="btn btn-success btn-sm color-white"
-                                                            data-toggle="modal" data-target="#add_detail{{ $category->id }}"><i
-                                                                class="fas fa-plus"></i></button>
                                                     </center>
                                                 </td>
                                             </tr>
@@ -93,69 +88,16 @@
         <!-- /.content -->
     </div>
 
-    <div class="modal fade" id="addcategory" aria-modal="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Add Category</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <form class="" role="form" method="post" autocomplete="off" action="{{ route('category_add') }}"
-                    enctype="multipart/form-data">
-                    @csrf
-                    <div class="modal-body">
-
-                        <div class="row">
-
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="cat_name">Name</label>
-                                    <input type="text" class="form-control" name="cat_name" id="cat_name" value="" required minlength="3">
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="cat_image">Image</label>
-                                    <input type="file" name="cat_image" id="cat_image" class="form-control" required>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="cat_description">Description</label>
-                                   <textarea name="cat_description" class="form-control" id="cat_description" row="3"></textarea>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="cat_meta">Meta</label>
-                                   <textarea name="cat_meta" class="form-control" id="cat_meta"></textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </div>
-                </form>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
     <!-- /.content-wrapper -->
 
 
-    @foreach ($categories as $category)
+    @foreach ($data as $category)
         <!-- /.modal -->
         <div class="modal fade" id="edit_page{{ $category->id }}" aria-modal="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Edit Category</h4>
+                        <h4 class="modal-title">Edit Category Detail</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -187,7 +129,7 @@
                                 <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="description">Description</label>
-                                   <textarea name="cat_description" class="form-control" id="cat_description" row="3">{{ $category->cat_description                                                                                            }}</textarea>
+                                   <textarea name="description" class="form-control" id="cat_description" row="3">{{ $category->cat_meta }}</textarea>
                                 </div>
                             </div>
                             <div class="col-md-12">
@@ -228,8 +170,8 @@
                             <input type="hidden" name="category_id" value="{{ $category->id }}"/>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="cat_dec_heading">Heading</label>
-                                    <input type="text" class="form-control" name="cat_dec_heading" id="cat_dec_heading" value="" required minlength="3">
+                                    <label for="heading">Heading</label>
+                                    <input type="text" class="form-control" name="cat_name" id="cat_dec_heading" value="" required minlength="3">
                                 </div>
                             </div>
                             <div class="col-md-12">
@@ -238,18 +180,10 @@
                                     <input type="file" name="cat_des_image" id="cat_des_image" class="form-control" required>
                                 </div>
                             </div>
-
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="cat_des_cimg">Images</label>
-                                    <input type="file" name="cat_des_cimg[]" id="cat_des_cimg" class="form-control" multiple required>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="cat_dec_description">Description</label>
-                                   <textarea name="cat_dec_description" class="form-control" id="cat_dec_description" row="3"></textarea>
+                                    <label for="description">Description</label>
+                                   <textarea name="description" class="form-control" id="cat_dec_description" row="3"></textarea>
                                 </div>
                             </div>
                             <div class="col-md-12">
