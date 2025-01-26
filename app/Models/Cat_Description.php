@@ -19,6 +19,6 @@ class Cat_Description extends Model
     }
 
     public function cat_images(){
-        return $this->hasMany(Cat_Des_Images::class,'id','cat_des_id');
+        return $this->hasMany(Cat_Des_Images::class,'cat_des_id','id');
     }
 }

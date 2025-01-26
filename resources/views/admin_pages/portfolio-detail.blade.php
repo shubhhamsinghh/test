@@ -7,12 +7,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Category Detail [{{$data[0]->category->cat_name}}]</h1>
+                        <h1>Portfolio Detail [{{$details[0]->portfolio->p_heading}}]</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-                            <li class="breadcrumb-item active">Category Detail [{{$data[0]->category->cat_name}}]</li>
+                            <li class="breadcrumb-item active">Portfolio Detail [{{$details[0]->portfolio->p_heading}}]</li>
                         </ol>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title color-red"><b>Category Detail Info</b></h3>
+                                <h3 class="card-title color-red"><b>Portfolio Detail Info</b></h3>
                                 <div class="card-tools">
                                     <ul class="nav nav-pills ml-auto">
                                         <li class="nav-item">
@@ -42,6 +42,7 @@
                                     <thead>
                                         <tr>
                                             <th width="30">#</th>
+                                            <th>Tab</th>
                                             <th>Heading</th>
                                             <th>Image</th>
                                             <th>
@@ -50,19 +51,24 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($data as $key => $category)
+                                        @foreach ($details as $key => $data)
                                         
                                             <tr>
                                                 <td>{{ ++$key }}</td>
-                                                <td>{{ $category->cat_dec_heading }}</td>
-                                                <td><img src="{{ asset('images/category/' . $category->cat_des_image) }}"
+                                                <td>{{ $data->tab->tab }}</td>
+                                                <td>{{ $data->pd_heading }}</td>
+                                                <td><img src="{{ asset('images/portfolio-detail/' . $data->pd_image) }}"
                                                         style="height:100px;"></td>
                                                 <td>
                                                     <center>
-                                                      <button class="btn btn-warning btn-sm color-white"
-                                                            data-toggle="modal" data-target="#show_detail{{ $category->id }}"><i class="fas fa-edit"></i></button>
-                                                      <a class="btn btn-danger btn-sm color-white" href="{{ route('category_detail_delete', ['id' => $category->id]) }}"
-                                                        onclick="return confirm('Are you sure to delete?')"><i class="fas fa-trash"></i></a>
+                                                        <button class="btn btn-warning btn-sm color-white"
+                                                            data-toggle="modal"
+                                                            data-target="#show_detail{{ $data->id }}"><i
+                                                                class="fas fa-edit"></i></button>
+                                                        <a class="btn btn-danger btn-sm color-white"
+                                                            href="{{ route('portfolio_detail_delete', ['id' => $data->id]) }}"
+                                                            onclick="return confirm('Are you sure to delete?')"><i
+                                                                class="fas fa-trash"></i></a>
                                                     </center>
                                                 </td>
                                             </tr>
@@ -89,49 +95,50 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Add Category Details [{{$data[0]->category->cat_name}}]</h4>
+                <h4 class="modal-title">Add Portfolio Details [{{$details[0]->portfolio->p_heading}}]</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form role="form" method="post" autocomplete="off" action="{{ route('category_detail_add') }}"
+            <form class="" role="form" method="post" autocomplete="off" action="{{ route('portfolio_detail_add') }}"
                 enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
+
                     <div class="row">
-                        <input type="hidden" name="category_id" value="{{ $data[0]->category->id }}" />
+                        <input type="hidden" name="portfolio_id" value="{{$details[0]->portfolio->id}}" />
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="cat_dec_heading">Heading</label>
-                                <input type="text" class="form-control" name="cat_dec_heading" id="cat_dec_heading" value="" required minlength="3">
+                                <label for="tab_id">Portfolio Tab</label>
+                               <select name="tab_id" id="tab_id" class="form-control" required>
+                                <option value="">-- Select Tab-- </option>
+                                @foreach($tabs as $tab)
+                                <option value="{{$tab->id}}">{{$tab->tab}}</option>
+                                @endforeach
+                               </select>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="cat_des_image">Cover Image</label>
-                                <input type="file" name="cat_des_image" id="cat_des_image" class="form-control" required>
+                                <label for="pd_heading">Heading</label>
+                                <input type="text" class="form-control" name="pd_heading" id="pd_heading" value="" required minlength="3">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="pd_image">Cover Image</label>
+                                <input type="file" name="pd_image" id="pd_image" class="form-control" required>
                             </div>
                         </div>
 
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="cat_des_cimg">Images</label>
-                                <input type="file" name="cat_des_cimg[]" id="cat_des_cimg" class="form-control" multiple required>
-                            </div>
-                        </div>
 
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="cat_dec_description">Description</label>
-                                <textarea name="cat_dec_description" class="form-control" id="cat_dec_description" row="3"></textarea>
+                                <label for="cat_dec_description">Video Link</label>
+                                <input type="text" name="pd_video" id="pd_video" class="form-control" required>
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="cat_dec_meta">Meta</label>
-                                <textarea name="cat_dec_meta" class="form-control" id="cat_dec_meta"></textarea>
-                            </div>
-                        </div>
+                       
                     </div>
 
                 </div>
@@ -146,65 +153,57 @@
     <!-- /.modal-dialog -->
 </div>
 
-@foreach ($data as $category)
-<div class="modal fade" id="show_detail{{ $category->id }}" aria-modal="true">
+@foreach ($details as $data)
+<div class="modal fade" id="show_detail{{$data->id}}" aria-modal="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Edit Category Details [{{$category->category->cat_name}}]</h4>
+                <h4 class="modal-title">Edit Portfolio Details [{{$data->portfolio->p_heading}}]</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form class="" role="form" method="post" autocomplete="off" action="{{ route('category_detail_update',['id' => $category->id]) }}"
+            <form class="" role="form" method="post" autocomplete="off" action="{{ route('portfolio_detail_update') }}"
                 enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-group">
-                                <label for="cat_dec_heading">Heading</label>
-                                <input type="text" class="form-control" name="cat_dec_heading" id="cat_dec_heading" value="{{$category->cat_dec_heading}}" required minlength="3">
+                                <label for="tab_id">Portfolio Tab</label>
+                                <input type="hidden" name="id" value="{{$data->id}}" >
+                               <select name="tab_id" id="tab_id" class="form-control" required>
+                                <option value="">-- Select Tab-- </option>
+                                @foreach($tabs as $tab)
+                                <option value="{{$tab->id}}" {{($tab->id == $data->tab_id?'selected':'')}}>{{$tab->tab}}</option>
+                                @endforeach
+                               </select>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-group">
-                                <label for="cat_des_image">Cover Image</label>
-                                <input type="file" name="cat_des_image" id="cat_des_image" class="form-control">
-                                <?php if(isset($category->cat_des_image)){ ?>
-                                    <img src="{{ asset('images/category/' . $category->cat_des_image) }}"
-                                        style="height:100px;" class="img-responsive"> 
-                                    <?php } ?>
+                                <label for="pd_heading">Heading</label>
+                                <input type="text" class="form-control" name="pd_heading" id="pd_heading" value="{{$data->pd_heading}}" required minlength="3">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="pd_image">Cover Image</label>
+                                <input type="file" name="pd_image" id="pd_image" class="form-control">
+                                <?php if(isset($data->pd_image)){ ?>
+                                        <img src="{{ asset('images/portfolio-detail/' . $data->pd_image) }}" style="height:100px;" class="img-responsive">
+                                        <?php } ?>
                             </div>
                         </div>
 
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="cat_dec_description">Description</label>
-                                <textarea name="cat_dec_description" class="form-control" id="cat_dec_description" row="3">{{$category->cat_dec_description}}</textarea>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="cat_dec_meta">Meta</label>
-                                <textarea name="cat_dec_meta" class="form-control" id="cat_dec_meta">{{$category->cat_dec_meta}}</textarea>
-                            </div>
-                        </div>
 
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="cat_des_cimg">Images</label>
-                                <input type="file" name="cat_des_cimg[]" id="cat_des_cimg" class="form-control" multiple required>
-                                <div class="image-container{{$category->id}}">
-                                <?php if(isset($category->cat_images)){ 
-                                    foreach($category->cat_images as $img){ ?>
-                                    <img src="{{ asset('images/category-detail/' . $img->cat_des_cimg) }}"
-                                        style="height:50px;" class="img-responsive"> 
-                                        <a class="btn btn-danger btn-sm color-white" onclick="deleteImage('{{$img->id}}','{{$category->id}}')"><i class="fas fa-trash"></i></a>
-                                <?php } } ?>
-                                </div>
+                                <label for="cat_dec_description">Video Link</label>
+                                <input type="text" name="pd_video" id="pd_video" class="form-control" value="{{$data->pd_video}}" required>
                             </div>
                         </div>
+                       
                     </div>
 
                 </div>
@@ -233,27 +232,5 @@
                 "responsive": true,
             });
         });
-
-        function deleteImage(id,apid){
-            if(confirm("Are you sure to delete this image?")){
-                $.ajax({
-                url: "{{ url('admin/category-detail-img-delete') }}/"+id,
-                type: 'get',
-                data: {apid : apid},
-                success: function(result) {
-                    if(result.status){
-                        $(".image-container"+apid).html(result.data);
-                        toastr.success('Image deleted.');
-                    }else{
-                        toastr.error('Failed to deleted image!');
-                    }
-                },
-                error: function(error) {
-                    console.error('Error:', error);
-                    toastr.error('Failed to deleted image!');
-                }
-            });
-            }
-        }
     </script>
 @endsection

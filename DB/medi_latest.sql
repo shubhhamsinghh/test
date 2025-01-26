@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 24, 2025 at 12:18 PM
+-- Generation Time: Jan 26, 2025 at 02:45 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -36,13 +36,6 @@ CREATE TABLE `category` (
   `cat_meta` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `category`
---
-
-INSERT INTO `category` (`id`, `cat_name`, `cat_url`, `cat_image`, `cat_description`, `cat_meta`) VALUES
-(1, 'zxczxc fdsdf', 'zxczxc-fdsdf', 'aboutbanner_71842.png', 'asdasd sadasdasd', 'zxczxczxczx eeee');
-
 -- --------------------------------------------------------
 
 --
@@ -72,6 +65,16 @@ CREATE TABLE `cat_des_images` (
   `cat_des_cimg` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `cat_des_images`
+--
+
+INSERT INTO `cat_des_images` (`id`, `category_id`, `cat_des_id`, `cat_des_cimg`) VALUES
+(16, 1, 1, 'deepika_42188.jpg'),
+(20, 1, 2, 'mohit_84678.jpg'),
+(22, 1, 3, 'seo-content-writing_17633.png'),
+(24, 1, 3, 'webdevelopment_65402.png');
+
 -- --------------------------------------------------------
 
 --
@@ -91,38 +94,57 @@ CREATE TABLE `contact` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `products`
+-- Table structure for table `portfolio`
 --
 
-CREATE TABLE `products` (
-  `id` int(255) NOT NULL,
-  `prod_name` varchar(255) NOT NULL,
-  `prod_url` varchar(255) NOT NULL,
-  `category_id` varchar(255) NOT NULL,
-  `sub_category_id` varchar(255) NOT NULL,
-  `prod_image` varchar(255) NOT NULL,
-  `image_alt` varchar(255) DEFAULT NULL,
-  `model_no` varchar(255) NOT NULL,
-  `description` text NOT NULL,
-  `is_trending` enum('0','1') NOT NULL DEFAULT '0',
-  `tab_product` enum('0','1') NOT NULL DEFAULT '0'
+CREATE TABLE `portfolio` (
+  `id` int(11) NOT NULL,
+  `p_heading` text NOT NULL,
+  `p_url` text NOT NULL,
+  `p_description` text NOT NULL,
+  `p_image` varchar(255) NOT NULL,
+  `p_meta` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `portfolio`
+--
+
+INSERT INTO `portfolio` (`id`, `p_heading`, `p_url`, `p_description`, `p_image`, `p_meta`) VALUES
+(2, 'Cinematography', 'cinematography', 'Our cinematic techniques making us more famous\r\nas a best wedding cinematographers in delhi, india.\r\nLook our wedding and pre wedding cinematography here', 'improvecredibility_52627.webp', '<meta>');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `port_details`
+--
+
+CREATE TABLE `port_details` (
+  `id` int(11) NOT NULL,
+  `portfolio_id` int(11) NOT NULL,
+  `tab_id` int(11) NOT NULL,
+  `pd_heading` text NOT NULL,
+  `pd_image` varchar(255) NOT NULL,
+  `pd_video` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sub_category`
+-- Table structure for table `tabs`
 --
 
-CREATE TABLE `sub_category` (
-  `id` int(255) NOT NULL,
-  `cat_id` varchar(255) NOT NULL,
-  `sr_no` varchar(100) DEFAULT NULL,
-  `sub_cat_name` varchar(255) NOT NULL,
-  `sub_cat_url` varchar(255) NOT NULL,
-  `sub_cat_image` varchar(255) NOT NULL,
-  `image_alt` varchar(255) DEFAULT NULL
+CREATE TABLE `tabs` (
+  `id` int(11) NOT NULL,
+  `tab` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tabs`
+--
+
+INSERT INTO `tabs` (`id`, `tab`) VALUES
+(1, 'Tab-11');
 
 -- --------------------------------------------------------
 
@@ -177,15 +199,21 @@ ALTER TABLE `contact`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `products`
+-- Indexes for table `portfolio`
 --
-ALTER TABLE `products`
+ALTER TABLE `portfolio`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sub_category`
+-- Indexes for table `port_details`
 --
-ALTER TABLE `sub_category`
+ALTER TABLE `port_details`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tabs`
+--
+ALTER TABLE `tabs`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -203,19 +231,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `cat_description`
 --
 ALTER TABLE `cat_description`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `cat_des_images`
 --
 ALTER TABLE `cat_des_images`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `contact`
@@ -224,16 +252,22 @@ ALTER TABLE `contact`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `products`
+-- AUTO_INCREMENT for table `portfolio`
 --
-ALTER TABLE `products`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `portfolio`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `sub_category`
+-- AUTO_INCREMENT for table `port_details`
 --
-ALTER TABLE `sub_category`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `port_details`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `tabs`
+--
+ALTER TABLE `tabs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`

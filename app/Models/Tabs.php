@@ -3,18 +3,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Tabs extends Model
 {
     protected $connection = 'mysql';
     protected $primaryKey = 'id';
-    protected $table = 'category';
+    protected $table = 'tabs';
     protected $fillable = array();
 
     public $timestamps = false;
 
-
-    public function cat_description(){
-        return $this->hasMany(Cat_Description::class);
-    }
 
 }

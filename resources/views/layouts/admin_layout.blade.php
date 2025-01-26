@@ -72,7 +72,6 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="{{ route('home') }}" class="brand-link">
-                <!-- <img src="{{ asset('admin_assets/images/logo.png') }}" width="125px" height="30px" style="margin-left:25px;" class="logo-default"> -->
                 <img src="{{ asset('favicon.png') }}" class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="brand-text font-weight-light">Test</span>
             </a>
@@ -81,10 +80,8 @@
 
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
-                        data-accordion="false">
-                        <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
                         <li class="nav-item">
                             <a href="{{ route('home') }}"
                                 class="nav-link {{ request()->route()->getName() == 'home' ? 'active' : '' }}">
@@ -92,43 +89,23 @@
                                 <p>Dashboard</p>
                             </a>
                         </li>
-
-                        <li
-                            class="nav-item has-treeview {{ request()->route()->getName() == 'category' || request()->route()->getName() == 'sub_category' ? 'menu-open' : '' }}">
-                            <a href="#"
-                                class="nav-link {{ request()->route()->getName() == 'category' || request()->route()->getName() == 'sub_category' ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-bars"></i>
-                                <p>
-                                    Manage Category
-                                    <i class="right fas fa-angle-left"></i> <!-- This shows the dropdown arrow -->
-                                </p>
+                      
+                        <li class="nav-item">
+                           <a href="{{ route('category') }}"
+                                class="nav-link {{ request()->route()->getName() == 'category' ? 'active' : '' }}">
+                                <i class="fas fa-bars nav-icon"></i>
+                                <p>Category</p>
                             </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('category') }}"
-                                        class="nav-link {{ request()->route()->getName() == 'category' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Category</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('sub_category') }}"
-                                        class="nav-link {{ request()->route()->getName() == 'sub_category' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Sub-Category</p>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{ route('product') }}"
-                                class="nav-link {{ request()->route()->getName() == 'product' ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-th-large"></i>
-                                <p>Products</p>
+                            <a href="{{ route('portfolio') }}"
+                                class="nav-link {{ request()->route()->getName() == 'portfolio' ? 'active' : '' }}">
+                                <i class="fas fa-portrait nav-icon"></i>
+                                <p>Video Portfolio</p>
                             </a>
                         </li>
-
+                        
                         <li class="nav-item">
                             <a href="{{ route('enquiries') }}"
                                 class="nav-link {{ request()->route()->getName() == 'enquiries' ? 'active' : '' }}">
@@ -136,13 +113,6 @@
                                 <p>Enquiry</p>
                             </a>
                         </li>
-
-                        <!-- <li class="nav-item">
-            <a href="{{ route('admin_logout') }}" class="nav-link" >
-              <i class="nav-icon fas fa-sign-out-alt fa-fw"></i>
-              <p>Logout</p>
-            </a>
-          </li> -->
 
                     </ul>
                 </nav>

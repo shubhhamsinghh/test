@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use App\Models\Sub_Category;
-use App\Models\Product;
 use App\Models\Cat_Description;
 use App\Models\Cat_Des_Images;
+use App\Models\Portfolio;
+use App\Models\Port_Details;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Svg\Tag\Rect;
 
 class AdminController extends Controller
 {
@@ -21,9 +22,10 @@ class AdminController extends Controller
 
     public function index()
     {
-        $a1 = DB::table('products')->count();
-        $a2 = DB::table('contact')->count();
-        return view('admin_pages.dashboard', compact('a1', 'a2'));
+        $a1 = DB::table('category')->count();
+        $a2 = DB::table('portfolio')->count();
+        $a3 = DB::table('contact')->count();
+        return view('admin_pages.dashboard', compact('a1', 'a2', 'a3'));
     }
 
     public function change_password()
@@ -50,7 +52,7 @@ class AdminController extends Controller
     /* Category */
     public function category()
     {
-        $categories = DB::table('category')->orderByDesc('id')->get();
+        $categories = Category::with('cat_description')->orderByDesc('id')->get();
         return view('admin_pages.category', compact('categories'));
     }
 
@@ -90,7 +92,7 @@ class AdminController extends Controller
         $category->cat_description = $request->cat_description;
         $category->cat_meta = $request->cat_meta;
         $category->save();
-        $request->session()->flash('response_msg', 'Category added successfully !!'); //success,info,error,warning
+        $request->session()->flash('response_msg', 'Category added successfully !!'); 
         $request->session()->flash('response_type', 'success');
         return redirect()->back(); 
         }
@@ -98,15 +100,22 @@ class AdminController extends Controller
 
     public function category_delete(Request $request, $id)
     {
+        $cat_desc = DB::table('Cat_Description')->where(['category_id' => $id])->count();
+        if($cat_desc > 0){
+            $request->session()->flash('response_msg', 'Cannot delete category with details !!'); 
+            $request->session()->flash('response_type', 'error');
+            return redirect()->back();
+        }else{
         $data = DB::table('category')->where(['id' => $id])->select('cat_image')->first();
         $image_path = 'images/category/' . $data->cat_image;
         if (File::exists($image_path)) {
             File::delete($image_path);
         }
         DB::table('category')->where(['id' => $id])->delete();
-        $request->session()->flash('response_msg', 'Category deleted successfully !!'); //success,info,error,warning
+        $request->session()->flash('response_msg', 'Category deleted successfully !!');
         $request->session()->flash('response_type', 'success');
         return redirect()->back();
+       }
     }
 
     public function category_update(Request $request)
@@ -151,7 +160,7 @@ class AdminController extends Controller
             }
         }
 
-        $request->session()->flash('response_msg', 'Category updated successfully !!'); //success,info,error,warning
+        $request->session()->flash('response_msg', 'Category updated successfully !!'); 
         $request->session()->flash('response_type', 'success');
         return redirect()->back();
     }
@@ -200,7 +209,6 @@ class AdminController extends Controller
         $filename_11 = '';
         $destinationpath_1 = 'images/category-detail/';
         if (request()->file('cat_des_cimg') != '' || request()->file('cat_des_cimg') != null) {
-            // if (request()->file('cat_des_cimg')->isValid()) {
                 foreach ($request->file('cat_des_cimg') as $fl) {
                     $file = $fl->getClientOriginalName();
                     $filename_1 = pathinfo($file, PATHINFO_FILENAME);
@@ -213,280 +221,319 @@ class AdminController extends Controller
                     $fl->move($destinationpath_1, $filename_11);
                     DB::table('cat_des_images')->insert(['category_id' => $request->category_id, 'cat_des_id' => $data->id, 'cat_des_cimg' => $filename_11]);
                 }
-            // }
         }
 
-        dd($data);
-
-        $request->session()->flash('response_msg', 'Category Detail added successfully !!'); //success,info,error,warning
+        $request->session()->flash('response_msg', 'Category Detail added successfully !!'); 
         $request->session()->flash('response_type', 'success');
         return redirect()->back();
     }
 
-    /* Sub-Category */
-    public function sub_category()
+    public function category_detail_update(Request $request,$id)
     {
-        $sub_categories = Sub_Category::with('category')->orderByDesc('id')->get();
-        $cat_data = DB::table('category')->get();
-        return view('admin_pages.sub_category', compact('sub_categories', 'cat_data'));
+        $data = DB::table('cat_description')->where(['id' => $id])->select('cat_des_image','category_id')->first();
+
+        $str_url = strtolower($request->cat_dec_heading);
+        $str_url = preg_replace("/[^a-z0-9\s-]/", "", $str_url);
+        $str_url = preg_replace("/[\s-]+/", "-", $str_url); 
+        $str_url = preg_replace("/[\s_]/", "-", $str_url);
+
+        $filename = '';
+        $filename1 = '';
+        $destinationpath = 'images/category/';
+        if (request()->file('cat_des_image') != '' || request()->file('cat_des_image') != null) {
+            if (request()->file('cat_des_image')->isValid()) {
+                $file = request()->file('cat_des_image')->getClientOriginalName();
+                $filename = pathinfo($file, PATHINFO_FILENAME);
+                $filename = strtolower($filename);
+                $filename = preg_replace("/[^a-z0-9_\s-]/", "", $filename);
+                $filename = preg_replace("/[\s-]+/", " ", $filename);
+                $filename = preg_replace("/[\s_]/", "-", $filename);
+                $extension1 = request()->file('cat_des_image')->getClientOriginalExtension();
+                $filename1 = $filename . '_' . rand(11111, 99999) . '.' . $extension1;
+                request()->file('cat_des_image')->move($destinationpath, $filename1);
+
+                $image_path = asset('images/category/' . $data->cat_des_image);
+                if (File::exists($image_path)) {
+                    File::delete($image_path);
+                }
+
+                DB::table('cat_description')->where('id', $id)->update(['cat_des_image' => $filename1]);
+            }
+        }
+
+        DB::table('cat_description')->where('id', $id)->update([
+            'cat_dec_heading' => $request->input('cat_dec_heading'),
+            'cat_dec_url' => $str_url,
+            'cat_dec_description' => $request->input('cat_dec_description'),
+            'cat_dec_meta' => $request->input('cat_dec_meta'),
+        ]);
+
+        $filename_1 = '';
+        $filename_11 = '';
+        $destinationpath_1 = 'images/category-detail/';
+        if (request()->file('cat_des_cimg') != '' || request()->file('cat_des_cimg') != null) {
+                foreach ($request->file('cat_des_cimg') as $fl) {
+                    $file = $fl->getClientOriginalName();
+                    $filename_1 = pathinfo($file, PATHINFO_FILENAME);
+                    $filename_1 = strtolower($filename_1);
+                    $filename_1 = preg_replace("/[^a-z0-9_\s-]/", "", $filename_1);
+                    $filename_1 = preg_replace("/[\s-]+/", " ", $filename_1);
+                    $filename_1 = preg_replace("/[\s_]/", "-", $filename_1);
+                    $extension1 = $fl->getClientOriginalExtension();
+                    $filename_11 = $filename_1 . '_' . rand(11111, 99999) . '.' . $extension1;
+                    $fl->move($destinationpath_1, $filename_11);
+                    DB::table('cat_des_images')->insert(['category_id' => $data->category_id, 'cat_des_id' => $id, 'cat_des_cimg' => $filename_11]);
+                }
+        }
+
+        $request->session()->flash('response_msg', 'Category Detail update successfully !!');
+        $request->session()->flash('response_type', 'success');
+        return redirect()->back();
     }
 
-    public function sub_category_add(Request $request)
+    public function category_detail_delete(Request $request, $id)
     {
-        if(Sub_Category::where('cat_id',$request->prod_cat)->where('sub_cat_name',$request->sub_cat_name)->exists()){
-        $request->session()->flash('response_msg', 'Sub Category already added !!'); //success,info,error,warning
-        $request->session()->flash('response_type', 'error');
+        $data1 = DB::table('cat_des_images')->where(['cat_des_id' => $id])->select('cat_des_cimg')->get();
+        foreach($data1 as $d){
+        $image_path = 'images/category-detail/' . $d->cat_des_cimg;
+        if (File::exists($image_path)) {
+            File::delete($image_path);
+        }
+        DB::table('cat_des_images')->where(['id' => $id])->delete();
+        }
+
+        $data = DB::table('cat_description')->where(['id' => $id])->select('cat_des_image')->first();
+        $image_path = 'images/category/' . $data->cat_des_image;
+        if (File::exists($image_path)) {
+            File::delete($image_path);
+        }
+        DB::table('cat_description')->where(['id' => $id])->delete();
+
+        $request->session()->flash('response_msg', 'Category Detail deleted successfully !!');
+        $request->session()->flash('response_type', 'success');
+        return redirect()->back();
+    }
+
+    public function category_detail_img_delete(Request $request, $id)
+    {
+        $apid = $request->apid;
+        $data = DB::table('cat_des_images')->where(['id' => $id])->select('cat_des_cimg','cat_des_id')->first();
+        $image_path = 'images/category-detail/' . $data->cat_des_cimg;
+        if (File::exists($image_path)) {
+            File::delete($image_path);
+        }
+        DB::table('cat_des_images')->where(['id' => $id])->delete();
+        
+        $images = $data = DB::table('cat_des_images')->where(['cat_des_id' => $data->cat_des_id])->get(); 
+        $html = '';
+        foreach($images as $img){
+            $html .='<img src="'.asset('images/category-detail/' . $img->cat_des_cimg).'" style="height:50px;" class="img-responsive"> 
+            <a class="btn btn-danger btn-sm color-white" onclick="deleteImage(\''.$img->id.'\',\''.$apid.'\')"><i class="fas fa-trash"></i></a>';
+        }
+        return response()->json(['status' => true,  'data' => $html]);
+    }
+
+    /* Portfolio */
+    public function portfolio()
+    {
+        $portfolio = Portfolio::orderByDesc('id')->get();
+        $tabs = DB::table('tabs')->orderByDesc('tab')->get();
+        return view('admin_pages.portfolio', compact('portfolio','tabs'));
+    }
+    
+    public function portfolio_update(Request $request)
+    {
+        $str_url = strtolower($request->p_heading);
+        $str_url = preg_replace("/[^a-z0-9\s-]/", "", $str_url);
+        $str_url = preg_replace("/[\s-]+/", "-", $str_url); 
+        $str_url = preg_replace("/[\s_]/", "-", $str_url);
+
+        $filename = '';
+        $filename1 = '';
+        $destinationpath = 'images/portfolio/';
+        if (request()->file('p_image') != '' || request()->file('p_image') != null) {
+            if (request()->file('p_image')->isValid()) {
+                $file = request()->file('p_image')->getClientOriginalName();
+                $filename = pathinfo($file, PATHINFO_FILENAME);
+                $filename = strtolower($filename);
+                $filename = preg_replace("/[^a-z0-9_\s-]/", "", $filename);
+                $filename = preg_replace("/[\s-]+/", " ", $filename);
+                $filename = preg_replace("/[\s_]/", "-", $filename);
+                $extension1 = request()->file('p_image')->getClientOriginalExtension();
+                $filename1 = $filename . '_' . rand(11111, 99999) . '.' . $extension1;
+                request()->file('p_image')->move($destinationpath, $filename1);
+
+                $data = DB::table('portfolio')->where(['id' => $request->id])->select('p_image')->first();
+                $image_path = asset('images/portfolio/' . $data->p_image);
+                if (File::exists($image_path)) {
+                    File::delete($image_path);
+                }
+
+                DB::table('portfolio')->where(['id'=> $request->id])->update(['p_image' => $filename1]);
+            }
+        }
+
+        DB::table('portfolio')->where('id', $request->id)->update([
+            'p_heading' => $request->input('p_heading'),
+            'p_url' => $str_url,
+            'p_description' => $request->input('p_description'),
+            'p_meta' => $request->input('p_meta'),
+        ]);
+
+        $request->session()->flash('response_msg', 'Portfolio update successfully !!');
+        $request->session()->flash('response_type', 'success');
+        return redirect()->back();
+    }
+
+    public function portfolio_delete(Request $request, $id)
+    {   
+        $data = DB::table('port_details')->where('portfolio_id',$id)->select('id','pd_image')->get();
+        foreach($data as $d){
+        $image_path = 'images/portfolio-detail/' . $d->pd_image;
+        if (File::exists($image_path)) {
+            File::delete($image_path);
+        }
+        DB::table('port_details')->where(['id' => $d->id])->delete();
+        }
+
+        $data1 = DB::table('portfolio')->where('id',$id)->select('p_image')->first();
+        $image_path = 'images/portfolio/' . $data1->p_image;
+        if (File::exists($image_path)) {
+            File::delete($image_path);
+        }
+        DB::table('portfolio')->where('id',$id)->delete();
+        $request->session()->flash('response_msg', 'Portfolio Delete successfully !!');
+        $request->session()->flash('response_type', 'success');
+        return redirect()->back();
+        
+    }
+
+    public function portfolio_detail($url)
+    {
+        $portfolio = Portfolio::where('p_url',$url)->first();
+        $tabs = DB::table('tabs')->orderByDesc('tab')->get();
+        $details = Port_Details::with('portfolio','tab')->where('portfolio_id',$portfolio->id)->orderByDesc('id')->get();
+        return view('admin_pages.portfolio-detail', compact('details','tabs'));
+    }
+
+    public function portfolio_detail_add(Request $request){
+        $filename = '';
+        $filename1 = '';
+        $destinationpath = 'images/portfolio-detail/';
+        if (request()->file('pd_image') != '' || request()->file('pd_image') != null) {
+            if (request()->file('pd_image')->isValid()) {
+                $file = request()->file('pd_image')->getClientOriginalName();
+                $filename = pathinfo($file, PATHINFO_FILENAME);
+                $filename = strtolower($filename);
+                $filename = preg_replace("/[^a-z0-9_\s-]/", "", $filename);
+                $filename = preg_replace("/[\s-]+/", " ", $filename);
+                $filename = preg_replace("/[\s_]/", "-", $filename);
+                $extension1 = request()->file('pd_image')->getClientOriginalExtension();
+                $filename1 = $filename . '_' . rand(11111, 99999) . '.' . $extension1;
+                request()->file('pd_image')->move($destinationpath, $filename1);
+            }
+        }
+
+    
+        $data = new Port_Details();
+        $data->portfolio_id = $request->portfolio_id;
+        $data->tab_id = $request->tab_id;
+        $data->pd_image = $filename1;
+        $data->pd_heading = $request->pd_heading;
+        $data->pd_video = $request->pd_video;
+        $data->save();
+        $request->session()->flash('response_msg', 'Portfolio Detail added successfully !!'); 
+        $request->session()->flash('response_type', 'success');
         return redirect()->back(); 
-        }else{
-        $filename = '';
-        $filename1 = '';
-        $destinationpath = 'images/sub_category/';
-        if (request()->file('sub_cat_image') != '' || request()->file('sub_cat_image') != null) {
-            if (request()->file('sub_cat_image')->isValid()) {
-                $file = request()->file('sub_cat_image')->getClientOriginalName();
-                $filename = pathinfo($file, PATHINFO_FILENAME);
-                $filename = strtolower($filename);
-                $filename = preg_replace("/[^a-z0-9_\s-]/", "", $filename);
-                $filename = preg_replace("/[\s-]+/", " ", $filename);
-                $filename = preg_replace("/[\s_]/", "-", $filename);
-                $extension1 = request()->file('sub_cat_image')->getClientOriginalExtension();
-                $filename1 = $filename . '_' . rand(11111, 99999) . '.' . $extension1;
-                request()->file('sub_cat_image')->move($destinationpath, $filename1);
-            }
-        }
-
-        $str_url = strtolower($request->sub_cat_name);
-        $str_url = preg_replace("/[^a-z0-9\s-]/", "", $str_url);
-        $str_url = preg_replace("/[\s-]+/", "-", $str_url);
-        $str_url = preg_replace("/[\s_]/", "-", $str_url);
-
-        $sub_category = new Sub_Category();
-        $sub_category->cat_id = $request->prod_cat;
-        $sub_category->sub_cat_name = $request->sub_cat_name;
-        $sub_category->sub_cat_url = $str_url;
-        $sub_category->sub_cat_image = $filename1;
-        $sub_category->image_alt = $request->image_alt;
-        $sub_category->save();
-        $request->session()->flash('response_msg', 'Sub-Category added successfully !!'); //success,info,error,warning
-        $request->session()->flash('response_type', 'success');
-        return redirect()->back();
-        }
     }
 
-    public function sub_category_delete(Request $request, $id)
-    {
-        $data = DB::table('sub_category')->where(['id' => $id])->select('sub_cat_image')->first();
-        $image_path = 'images/sub_category/' . $data->sub_cat_image;
-        if (File::exists($image_path)) {
-            File::delete($image_path);
-        }
-        DB::table('sub_category')->where(['id' => $id])->delete();
-        $request->session()->flash('response_msg', 'Sub-Category deleted successfully !!'); //success,info,error,warning
-        $request->session()->flash('response_type', 'success');
-        return redirect()->back();
-    }
-
-    public function sub_category_update(Request $request)
-    {
-        $id = $request->input('sub_cat_id');
-
-        $str_url = strtolower($request->sub_cat_name);
-        $str_url = preg_replace("/[^a-z0-9\s-]/", "", $str_url);
-        $str_url = preg_replace("/[\s-]+/", "-", $str_url);
-        $str_url = preg_replace("/[\s_]/", "-", $str_url);
-
-        DB::table('sub_category')->where('id', $id)->update([
-            'cat_id' => $request->input('prod_cat'),
-            'sub_cat_name' => $request->input('sub_cat_name'),
-            'sub_cat_url' => $str_url,
-            'image_alt' => $request->input('image_alt'),
-        ]);
-
-        $filename = '';
-        $filename1 = '';;
-        $destinationpath = 'images/sub_category/';
-
-        if ($request->hasFile('sub_cat_image')) {
-            if ($request->file('sub_cat_image')->isValid()) {
-                $file = $request->file('sub_cat_image')->getClientOriginalName();
-                $filename = pathinfo($file, PATHINFO_FILENAME);
-                $filename = strtolower($filename);
-                $filename = preg_replace("/[^a-z0-9_\s-]/", "", $filename);
-                $filename = preg_replace("/[\s-]+/", " ", $filename);
-                $filename = preg_replace("/[\s_]/", "-", $filename);
-                $extension1 = $request->file('sub_cat_image')->getClientOriginalExtension();
-                $filename1 = $filename . '_' . rand(11111, 99999) . '.' . $extension1;
-                $request->file('sub_cat_image')->move($destinationpath, $filename1);
-
-                $data = DB::table('sub_category')->where(['id' => $id])->select('sub_cat_image')->first();
-                $image_path = 'images/sub_category/' . $data->sub_cat_image;
-                if (File::exists($image_path)) {
-                    File::delete($image_path);
-                }
-
-                DB::table('sub_category')->where('id', $id)->update(['sub_cat_image' => $filename1]);
-            }
-        }
-
-        $request->session()->flash('response_msg', 'Category updated successfully !!'); //success,info,error,warning
-        $request->session()->flash('response_type', 'success');
-        return redirect()->back();
-    }
-    
-    
-    public function serial_no(Request $request)
-    {
+    public function portfolio_detail_update(Request $request){
         $id = $request->id;
-        $sr_no = $request->sr_no;
-        if($id != null && $sr_no != null){
-        $data = DB::table('sub_category')->where('id', $id)->first();
-          if($data != null){
-                DB::table('sub_category')->where('id', $id)->update(['sr_no' => $sr_no]);
-                return response(['success' => true]);
-          }
-        }else{
-            return response(['success' => false]);
-        }
-    }
-
-    
-
-    /* Products */
-    public function product()
-    {
-        $products = Product::with('category', 'sub_category')->orderByDesc('id')->get();
-        $cat_data = DB::table('category')->get();
-        // $sub_cat_data = DB::table('sub_category')->get();
-        return view('admin_pages.product', compact('products', 'cat_data')); //,'sub_cat_data'
-    }
-
-    public function product_add(Request $request)
-    {
         $filename = '';
         $filename1 = '';
-        $destinationpath = 'images/products/';
-        if (request()->file('prod_image') != '' || request()->file('prod_image') != null) {
-            if (request()->file('prod_image')->isValid()) {
-                $file = request()->file('prod_image')->getClientOriginalName();
+        $destinationpath = 'images/portfolio-detail/';
+        if (request()->file('pd_image') != '' || request()->file('pd_image') != null) {
+            if (request()->file('pd_image')->isValid()) {
+                $file = request()->file('pd_image')->getClientOriginalName();
                 $filename = pathinfo($file, PATHINFO_FILENAME);
                 $filename = strtolower($filename);
                 $filename = preg_replace("/[^a-z0-9_\s-]/", "", $filename);
                 $filename = preg_replace("/[\s-]+/", " ", $filename);
                 $filename = preg_replace("/[\s_]/", "-", $filename);
-                $extension1 = request()->file('prod_image')->getClientOriginalExtension();
+                $extension1 = request()->file('pd_image')->getClientOriginalExtension();
                 $filename1 = $filename . '_' . rand(11111, 99999) . '.' . $extension1;
-                request()->file('prod_image')->move($destinationpath, $filename1);
-            }
-        }
+                request()->file('pd_image')->move($destinationpath, $filename1);
 
-        $str_url = strtolower($request->prod_name);
-        $str_url = preg_replace("/[^a-z0-9\s-]/", "", $str_url);
-        $str_url = preg_replace("/[\s-]+/", "-", $str_url);
-        $str_url = preg_replace("/[\s_]/", "-", $str_url);
-
-        $product = new Product();
-        $product->prod_name = $request->prod_name;
-        $product->prod_url = $str_url;
-        $product->category_id = $request->prod_cat;
-        $product->sub_category_id = $request->prod_sub_cat;
-        $product->prod_image = $filename1;
-        $product->image_alt = $request->image_alt;
-        $product->model_no = $request->model_no;
-        $product->description = $request->prod_desc;
-        $product->save();
-        $request->session()->flash('response_msg', 'Sub-Category added successfully !!'); //success,info,error,warning
-        $request->session()->flash('response_type', 'success');
-        return redirect()->back();
-    }
-
-    public function product_delete(Request $request, $id)
-    {
-        $data = DB::table('products')->where(['id' => $id])->select('prod_image')->first();
-        $image_path = 'images/products/' . $data->prod_image;
-        if (File::exists($image_path)) {
-            File::delete($image_path);
-        }
-        DB::table('products')->where(['id' => $id])->delete();
-        $request->session()->flash('response_msg', 'Product deleted successfully !!'); //success,info,error,warning
-        $request->session()->flash('response_type', 'success');
-        return redirect()->back();
-    }
-
-    public function product_update(Request $request)
-    {
-        $id = $request->input('prod_id');
-
-        $str_url = strtolower($request->prod_name);
-        $str_url = preg_replace("/[^a-z0-9\s-]/", "", $str_url);
-        $str_url = preg_replace("/[\s-]+/", "-", $str_url);
-        $str_url = preg_replace("/[\s_]/", "-", $str_url);
-
-        DB::table('products')->where('id', $id)->update([
-            'prod_name' => $request->input('prod_name'),
-            'prod_url' => $str_url,
-            'category_id' => $request->input('prod_cat'),
-            'sub_category_id' => $request->input('prod_sub_cat'),
-            'image_alt' => $request->input('image_alt'),
-            'model_no' => $request->input('model_no'),
-            'description' => $request->input('prod_desc'),
-        ]);
-
-        $filename = '';
-        $filename1 = '';;
-        $destinationpath = 'images/products/';
-
-        if ($request->hasFile('prod_image')) {
-            if ($request->file('prod_image')->isValid()) {
-                $file = $request->file('prod_image')->getClientOriginalName();
-                $filename = pathinfo($file, PATHINFO_FILENAME);
-                $filename = strtolower($filename);
-                $filename = preg_replace("/[^a-z0-9_\s-]/", "", $filename);
-                $filename = preg_replace("/[\s-]+/", " ", $filename);
-                $filename = preg_replace("/[\s_]/", "-", $filename);
-                $extension1 = $request->file('prod_image')->getClientOriginalExtension();
-                $filename1 = $filename . '_' . rand(11111, 99999) . '.' . $extension1;
-                $request->file('prod_image')->move($destinationpath, $filename1);
-
-                $data = DB::table('products')->where(['id' => $id])->select('prod_image')->first();
-                $image_path = 'images/products/' . $data->prod_image;
+                $data = DB::table('port_details')->where(['id' => $id])->select('pd_image')->first();
+                $image_path = asset('images/portfolio-detail/' . $data->pd_image);
                 if (File::exists($image_path)) {
                     File::delete($image_path);
                 }
 
-                DB::table('products')->where('id', $id)->update(['prod_image' => $filename1]);
+                DB::table('port_details')->where(['id'=> $id])->update(['pd_image' => $filename1]);
             }
         }
 
-        $request->session()->flash('response_msg', 'Product updated successfully !!'); //success,info,error,warning
+        DB::table('port_details')->where('id', $id)->update([
+            'tab_id' => $request->input('tab_id'),
+            'pd_heading' => $request->input('pd_heading'),
+            'pd_video' => $request->input('pd_video'),
+        ]);
+
+        $request->session()->flash('response_msg', 'Portfolio Detail update successfully !!'); 
+        $request->session()->flash('response_type', 'success');
+        return redirect()->back(); 
+    }
+
+    public function portfolio_detail_delete(Request $request, $id){
+        $data = DB::table('port_details')->where(['id' => $id])->select('pd_image','portfolio_id')->first();
+        $image_path = 'images/portfolio-detail/' . $data->pd_image;
+        if (File::exists($image_path)) {
+            File::delete($image_path);
+        }
+        DB::table('port_details')->where(['id' => $id])->delete();
+        $request->session()->flash('response_msg', 'Portfolio detail deleted successfully !!');
+        $request->session()->flash('response_type', 'success');
+        if(DB::table('port_details')->where('portfolio_id',$data->portfolio_id)->count() > 0){
+            return redirect()->back();
+        }else{
+            return redirect()->route('portfolio');
+        }
+        
+    }
+
+    /* Tabs */
+    public function tab_add(Request $request)
+    {
+        DB::table('tabs')->insert(['tab' => $request->tab]);
+        $request->session()->flash('response_msg', 'Portfolio Tab Add successfully !!');
         $request->session()->flash('response_type', 'success');
         return redirect()->back();
     }
 
-    public function get_sub_cat($id)
+    public function tab_update(Request $request)
     {
-        $subCategories = DB::table('sub_category')->where('cat_id', $id)->get();
-        $html = '<option value="">--Select Sub Category--</option>';
-        foreach ($subCategories as $sub) {
-            $html .= "<option value='" . $sub->id . "'>" . $sub->sub_cat_name . "</option>";
-        }
-        return $html;
-    }
-    
-    public function is_trending($id)
-    {
-        $data = DB::table('products')->where('id', $id)->first();
-        $status = ($data->is_trending == '1') ? '0' : '1';
-        DB::table('products')->where('id', $id)->update(['is_trending' => $status]);
-        return true;
+        DB::table('tabs')->where('id',$request->id)->update(['tab' => $request->tab]);
+        $request->session()->flash('response_msg', 'Portfolio Tab Update successfully !!');
+        $request->session()->flash('response_type', 'success');
+        return redirect()->back();
     }
 
-    public function is_tab($id)
-    {
-        $data = DB::table('products')->where('id', $id)->first();
-        $status = ($data->tab_product == '1') ? '0' : '1';
-        DB::table('products')->where('id', $id)->update(['tab_product' => $status]);
-        return true;
+    public function tab_delete(Request $request, $id)
+    {   
+        $data = DB::table('port_details')->where('tab_id',$id)->count();
+        if($data > 0){
+            $request->session()->flash('response_msg', 'Cannot delete tab with details !!'); 
+            $request->session()->flash('response_type', 'error');
+            return redirect()->back();
+        }else{
+        DB::table('tabs')->where('id',$id)->delete();
+        $request->session()->flash('response_msg', 'Portfolio Tab Delete successfully !!');
+        $request->session()->flash('response_type', 'success');
+        return redirect()->back();
+        }
     }
+
 
     /* Enquiries */
     public function enquiries()

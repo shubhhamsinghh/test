@@ -25,22 +25,31 @@
             <div class="container-fluid">
                 <!-- Small boxes (Stat box) -->
                 <div class="row">
-
-                    <!-- ./col -->
-
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-primary">
+                            <div class="inner">
+                                <h3>{{ $a1 }}</h3>
+                                <p> Categories </p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-bars"></i>
+                            </div>
+                            <a href="{{ route('category') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
 
                     <div class="col-lg-3 col-6">
                         <!-- small box -->
                         <div class="small-box bg-success">
                             <div class="inner">
-                                <h3>{{ $a1 }}</h3>
-
-                                <p> Products </p>
+                                <h3>{{ $a2 }}</h3>
+                                <p> Portfolio </p>
                             </div>
                             <div class="icon">
-                                <i class="fa fa-building"></i>
+                            <i class="fas fa-portrait"></i>
                             </div>
-                            <a href="{{ route('product') }}" class="small-box-footer">More info <i
+                            <a href="{{ route('portfolio') }}" class="small-box-footer">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -50,11 +59,10 @@
                         <div class="small-box bg-danger">
                             <div class="inner">
                                 <h3>{{ $a2 }}</h3>
-
                                 <p>Enquiry</p>
                             </div>
                             <div class="icon">
-                                <i class="fa fa-globe"></i>
+                                <i class="fa fa-question-circle"></i>
                             </div>
                             <a href="{{ route('enquiries') }}" class="small-box-footer">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>

@@ -3,18 +3,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Portfolio extends Model
 {
     protected $connection = 'mysql';
     protected $primaryKey = 'id';
-    protected $table = 'category';
+    protected $table = 'portfolio';
     protected $fillable = array();
 
     public $timestamps = false;
 
 
-    public function cat_description(){
-        return $this->hasMany(Cat_Description::class);
+    public function port_details(){
+        return $this->hasMany(Port_Details::class);
     }
 
 }

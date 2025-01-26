@@ -33,26 +33,25 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/category-add', [AdminController::class, 'category_add'])->name('category_add');
     Route::post('/category-update', [AdminController::class, 'category_update'])->name('category_update');
     Route::get('/category-delete/{id}', [AdminController::class, 'category_delete'])->name('category_delete');
+    Route::get('/category-detail/{url}', [AdminController::class, 'category_detail'])->name('category_detail');
     Route::post('/category-detail-add', [AdminController::class, 'category_detail_add'])->name('category_detail_add');
     Route::post('/category-detail-edit/{id}', [AdminController::class, 'category_detail_update'])->name('category_detail_update');
-    Route::get('/category-detail/{url}', [AdminController::class, 'category_detail'])->name('category_detail');
-    
-    //=========== Sub-Category Route ======================
-    Route::get('/sub_category', [AdminController::class, 'sub_category'])->name('sub_category');
-    Route::post('/sub_category_add', [AdminController::class, 'sub_category_add'])->name('sub_category_add');
-    Route::post('/sub_category_update', [AdminController::class, 'sub_category_update'])->name('sub_category_update');
-    Route::get('/sub_category_delete/{id}', [AdminController::class, 'sub_category_delete'])->name('sub_category_delete');
-    Route::get('/serial_no', [AdminController::class, 'serial_no'])->name('serial_no');
-    
-    //=========== Products Route ======================
-    Route::get('/product', [AdminController::class, 'product'])->name('product');
-    Route::post('/product_add', [AdminController::class, 'product_add'])->name('product_add');
-    Route::post('/product_update', [AdminController::class, 'product_update'])->name('product_update');
-    Route::get('/product_delete/{id}', [AdminController::class, 'product_delete'])->name('product_delete');
-    Route::get('/get_sub_cat/{id}', [AdminController::class, 'get_sub_cat'])->name('get_sub_cat');
-    Route::get('/is_trending/{id}', [AdminController::class, 'is_trending'])->name('is_trending');
-    Route::get('/is_tab/{id}', [AdminController::class, 'is_tab'])->name('is_tab');
+    Route::get('/category-detail-delete/{id}', [AdminController::class, 'category_detail_delete'])->name('category_detail_delete');
+    Route::get('/category-detail-img-delete/{id}', [AdminController::class, 'category_detail_img_delete'])->name('category_detail_img_delete');
 
+    //=========== Portfolio Route ======================
+    Route::get('/portfolio', [AdminController::class, 'portfolio'])->name('portfolio');
+    Route::post('/portfolio-update', [AdminController::class, 'portfolio_update'])->name('portfolio_update');
+    Route::get('/portfolio-delete/{id}', [AdminController::class, 'portfolio_delete'])->name('portfolio_delete');
+    Route::post('/portfolio-tab-add', [AdminController::class, 'tab_add'])->name('tab_add');
+    Route::post('/portfolio-tab-update', [AdminController::class, 'tab_update'])->name('tab_update');
+    Route::get('/portfolio-tab-delete/{id}', [AdminController::class, 'tab_delete'])->name('tab_delete');
+    Route::get('/portfolio-detail/{url}', [AdminController::class, 'portfolio_detail'])->name('portfolio_detail');
+    Route::post('/portfolio-detail-add', [AdminController::class, 'portfolio_detail_add'])->name('portfolio_detail_add');
+    Route::post('/portfolio-detail-update', [AdminController::class, 'portfolio_detail_update'])->name('portfolio_detail_update');
+    Route::get('/portfolio-detail-delete/{id}', [AdminController::class, 'portfolio_detail_delete'])->name('portfolio_detail_delete');
+
+     //=========== Enquiries Route ======================
     Route::get('/enquiries', [AdminController::class, 'enquiries'])->name('enquiries');
     Route::get('/enquiry-delete/{id}', [AdminController::class, 'enq_delete'])->name('enq_delete');
 
