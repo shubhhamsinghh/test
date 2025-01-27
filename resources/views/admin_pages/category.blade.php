@@ -45,7 +45,7 @@
                                         <th>Heading</th>
                                         <th>Thumbnail Image</th>
                                         <th>Banner Image</th>
-                                        <th>Home Page</th>
+                                       
                                         <th>
                                             <center>Action</center>
                                         </th>
@@ -60,7 +60,6 @@
                                                 style="height:100px;"></td>
                                         <td><img src="{{ asset('images/category/' . $category->cat_ban_image) }}"
                                                 style="height:100px;"></td>
-                                        <td><input type="checkbox" class="form-control" onclick="is_home('{{$category->id}}')" {{($category->is_home == 1)?'checked':''}} ></td>
                                         <td>
                                             <center>
                                                 <button class="btn btn-warning btn-sm color-white"
@@ -320,20 +319,5 @@
         });
     });
 </script>
-<script>
-    function is_home(id){
-        
-        $.ajax({
-            type: "GET",
-            url: "{{url('admin/is_home')}}/"+id,
-            success: function( data ) {
-              if(data.success){
-                toastr.success('Data saved!')
-              }else{
-                toastr.error('Failed to save data!')
-              }
-            }
-        });
-    }
-</script>
+
 @endsection

@@ -164,9 +164,9 @@ class AdminController extends Controller
     }
     public function is_home($id)
     {
-        $data = DB::table('category')->where('id', $id)->first();
+        $data = DB::table('cat_description')->where('id', $id)->first();
         if($data->is_home == 0){$status = 1;}else{ $status = 0;}
-        DB::table('category')->where('id', $id)->update(['is_home' => $status]);
+        DB::table('cat_description')->where('id', $id)->update(['is_home' => $status]);
         return response()->json(['success' => true]);
     }
 
