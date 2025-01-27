@@ -131,6 +131,7 @@ class AdminController extends Controller
         $category->cat_image = $filename1;
         $category->cat_ban_image = $filename21;
         $category->cat_description = $request->cat_description;
+        $category->cat_detail_des = $request->cat_detail_des;
         $category->cat_meta = $request->cat_meta;
         $category->save();
         $request->session()->flash('response_msg', 'Category added successfully !!'); 
@@ -183,6 +184,7 @@ class AdminController extends Controller
             'cat_url' => $str_url,
             'cat_description' => $request->input('cat_description'),
             'cat_meta' => $request->input('cat_meta'),
+            'cat_detail_des' => $request->input('cat_detail_des'),
         ]);
 
         $filename = '';$filename1 = '';

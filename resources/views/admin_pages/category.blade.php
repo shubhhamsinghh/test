@@ -143,6 +143,12 @@
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
+                                <label for="cat_detail_des">Detail Description</label>
+                                <textarea name="cat_detail_des" class="form-control summernote" id="cat_detail_des" row="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
                                 <label for="cat_meta">Meta</label>
                                 <textarea name="cat_meta" class="form-control" id="cat_meta"></textarea>
                             </div>
@@ -211,9 +217,17 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="description">Description</label>
-                                <textarea name="cat_description" class="form-control" id="cat_description" row="3">{{ $category->cat_description                                                                                            }}</textarea>
+                                <textarea name="cat_description" class="form-control" id="cat_description" row="3">{{ $category->cat_description}}</textarea>
                             </div>
                         </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="cat_detail_des">Detail Description</label>
+                                <textarea name="cat_detail_des" class="form-control summernote" id="cat_detail_des" row="3">{{ $category->cat_detail_des}}</textarea>
+                            </div>
+                        </div>
+
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="meta">Meta</label>
