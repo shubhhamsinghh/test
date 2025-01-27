@@ -21,6 +21,7 @@ class HomeController extends Controller
 
     public function index()
     {
+        return redirect('/login');
         // $categories = Category::get();
         // $products = Product::with('category', 'sub_category')->where('is_trending', '1')->get();
         // // $tab_products = Product::with('category', 'sub_category')->where('tab_product', '1')->get(); tab_products

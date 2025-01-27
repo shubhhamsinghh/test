@@ -25,7 +25,9 @@ class AdminController extends Controller
         $a1 = DB::table('category')->count();
         $a2 = DB::table('portfolio')->count();
         $a3 = DB::table('contact')->count();
-        return view('admin_pages.dashboard', compact('a1', 'a2', 'a3'));
+        $a4 = DB::table('company_info')->count();
+        $a5 = DB::table('testimonials')->count();
+        return view('admin_pages.dashboard', compact('a1', 'a2', 'a3', 'a4', 'a5'));
     }
 
     public function change_password()
@@ -49,6 +51,30 @@ class AdminController extends Controller
         }
     }
 
+    public function company_info(){
+
+        $company_info = DB::table('company_info')->first();
+        return view('admin_pages.company',compact('company_info'));
+    }
+
+    public function company_info_update(Request $request){
+
+        $company_info = array(
+            'comp_email1' => $request->c_email1,
+            'comp_contact1' => $request->c_no1,
+            'comp_address' => $request->c_adrs,
+            'comp_map' => $request->c_map,
+            'comp_sm1' => $request->c_sm1,
+            'comp_sm2' => $request->c_sm2,
+            'comp_sm3' => $request->c_sm3,
+            'comp_sm4' => $request->c_sm4,
+        );
+        $company_info = DB::table('company_info')->where('id',1)->update($company_info);
+        $request->session()->flash('response_msg', 'Company Info updated successfully !!'); //success,info,error,warning
+        $request->session()->flash('response_type', 'success');
+        return redirect()->back();
+    }
+
     /* Category */
     public function category()
     {
@@ -63,8 +89,8 @@ class AdminController extends Controller
         $request->session()->flash('response_type', 'error');
         return redirect()->back(); 
         }else{
-        $filename = '';
-        $filename1 = '';
+        $filename = '';$filename1 = '';
+        $filename2 = '';$filename21 = '';
         $destinationpath = 'images/category/';
         if (request()->file('cat_image') != '' || request()->file('cat_image') != null) {
             if (request()->file('cat_image')->isValid()) {
@@ -80,6 +106,20 @@ class AdminController extends Controller
             }
         }
 
+        if (request()->file('cat_image') != '' || request()->file('cat_image') != null) {
+            if (request()->file('cat_image')->isValid()) {
+                $file = request()->file('cat_image')->getClientOriginalName();
+                $filename2 = pathinfo($file, PATHINFO_FILENAME);
+                $filename2 = strtolower($filename2);
+                $filename2 = preg_replace("/[^a-z0-9_\s-]/", "", $filename2);
+                $filename2 = preg_replace("/[\s-]+/", " ", $filename2);
+                $filename2 = preg_replace("/[\s_]/", "-", $filename2);
+                $extension1 = request()->file('cat_image')->getClientOriginalExtension();
+                $filename21 = $filename . '_' . rand(11111, 99999) . '.' . $extension1;
+                request()->file('cat_image')->move($destinationpath, $filename21);
+            }
+        }
+
         $str_url = strtolower($request->cat_name);
         $str_url = preg_replace("/[^a-z0-9\s-]/", "", $str_url);
         $str_url = preg_replace("/[\s-]+/", "-", $str_url);
@@ -89,6 +129,7 @@ class AdminController extends Controller
         $category->cat_name = $request->cat_name;
         $category->cat_url = $str_url;
         $category->cat_image = $filename1;
+        $category->cat_ban_image = $filename21;
         $category->cat_description = $request->cat_description;
         $category->cat_meta = $request->cat_meta;
         $category->save();
@@ -100,22 +141,33 @@ class AdminController extends Controller
 
     public function category_delete(Request $request, $id)
     {
-        $cat_desc = DB::table('Cat_Description')->where(['category_id' => $id])->count();
+        $cat_desc = DB::table('cat_description')->where(['category_id' => $id])->count();
         if($cat_desc > 0){
             $request->session()->flash('response_msg', 'Cannot delete category with details !!'); 
             $request->session()->flash('response_type', 'error');
             return redirect()->back();
         }else{
-        $data = DB::table('category')->where(['id' => $id])->select('cat_image')->first();
+        $data = DB::table('category')->where(['id' => $id])->select('cat_image','cat_ban_image')->first();
         $image_path = 'images/category/' . $data->cat_image;
+        $image_path2 = 'images/category/' . $data->cat_ban_image;
         if (File::exists($image_path)) {
             File::delete($image_path);
+        }
+        if (File::exists($image_path2)) {
+            File::delete($image_path2);
         }
         DB::table('category')->where(['id' => $id])->delete();
         $request->session()->flash('response_msg', 'Category deleted successfully !!');
         $request->session()->flash('response_type', 'success');
         return redirect()->back();
        }
+    }
+    public function is_home($id)
+    {
+        $data = DB::table('category')->where('id', $id)->first();
+        if($data->is_home == 0){$status = 1;}else{ $status = 0;}
+        DB::table('category')->where('id', $id)->update(['is_home' => $status]);
+        return response()->json(['success' => true]);
     }
 
     public function category_update(Request $request)
@@ -133,8 +185,8 @@ class AdminController extends Controller
             'cat_meta' => $request->input('cat_meta'),
         ]);
 
-        $filename = '';
-        $filename1 = '';;
+        $filename = '';$filename1 = '';
+        $filename2 = '';$filename21 = '';
         $destinationpath = 'images/category/';
 
         if ($request->hasFile('cat_image')) {
@@ -150,13 +202,36 @@ class AdminController extends Controller
                 $request->file('cat_image')->move($destinationpath, $filename1);
 
                 $data = DB::table('category')->where(['id' => $id])->select('cat_image')->first();
-                $image_path = asset('images/category/' . $data->cat_image);
+                $image_path = 'images/category/' . $data->cat_image;
                 if (File::exists($image_path)) {
                     File::delete($image_path);
                 }
                 File::delete($image_path);
 
                 DB::table('category')->where('id', $id)->update(['cat_image' => $filename1]);
+            }
+        }
+
+        if ($request->hasFile('cat_ban_image')) {
+            if ($request->file('cat_ban_image')->isValid()) {
+                $file = $request->file('cat_ban_image')->getClientOriginalName();
+                $filename2 = pathinfo($file, PATHINFO_FILENAME);
+                $filename2 = strtolower($filename2);
+                $filename2 = preg_replace("/[^a-z0-9_\s-]/", "", $filename2);
+                $filename2 = preg_replace("/[\s-]+/", " ", $filename2);
+                $filename2 = preg_replace("/[\s_]/", "-", $filename2);
+                $extension1 = $request->file('cat_ban_image')->getClientOriginalExtension();
+                $filename21 = $filename2 . '_' . rand(11111, 99999) . '.' . $extension1;
+                $request->file('cat_ban_image')->move($destinationpath, $filename21);
+
+                $data = DB::table('category')->where(['id' => $id])->select('cat_ban_image')->first();
+                $image_path = 'images/category/' . $data->cat_ban_image;
+                if (File::exists($image_path)) {
+                    File::delete($image_path);
+                }
+                File::delete($image_path);
+
+                DB::table('category')->where('id', $id)->update(['cat_ban_image' => $filename21]);
             }
         }
 
@@ -179,8 +254,8 @@ class AdminController extends Controller
         $str_url = preg_replace("/[\s-]+/", "-", $str_url); 
         $str_url = preg_replace("/[\s_]/", "-", $str_url);
 
-        $filename = '';
-        $filename1 = '';
+        $filename = '';$filename1 = '';
+        $filename2 = '';$filename21 = '';
         $destinationpath = 'images/category/';
         if (request()->file('cat_des_image') != '' || request()->file('cat_des_image') != null) {
             if (request()->file('cat_des_image')->isValid()) {
@@ -196,17 +271,31 @@ class AdminController extends Controller
             }
         }
 
+        if (request()->file('cat_des_ban_image') != '' || request()->file('cat_des_ban_image') != null) {
+            if (request()->file('cat_des_ban_image')->isValid()) {
+                $file = request()->file('cat_des_ban_image')->getClientOriginalName();
+                $filename2 = pathinfo($file, PATHINFO_FILENAME);
+                $filename2 = strtolower($filename2);
+                $filename2 = preg_replace("/[^a-z0-9_\s-]/", "", $filename2);
+                $filename2 = preg_replace("/[\s-]+/", " ", $filename2);
+                $filename2 = preg_replace("/[\s_]/", "-", $filename2);
+                $extension1 = request()->file('cat_des_ban_image')->getClientOriginalExtension();
+                $filename21 = $filename2 . '_' . rand(11111, 99999) . '.' . $extension1;
+                request()->file('cat_des_ban_image')->move($destinationpath, $filename21);
+            }
+        }
+
         $data = new Cat_Description();
         $data->category_id = $request->category_id;
         $data->cat_dec_heading = $request->cat_dec_heading;
         $data->cat_dec_url = $str_url;
         $data->cat_des_image = $filename1;
+        $data->cat_des_ban_image = $filename21;
         $data->cat_dec_description = $request->cat_dec_description;
         $data->cat_dec_meta = $request->cat_dec_meta;
         $data->save();
 
-        $filename_1 = '';
-        $filename_11 = '';
+        $filename_1 = ''; $filename_11 = '';
         $destinationpath_1 = 'images/category-detail/';
         if (request()->file('cat_des_cimg') != '' || request()->file('cat_des_cimg') != null) {
                 foreach ($request->file('cat_des_cimg') as $fl) {
@@ -237,8 +326,8 @@ class AdminController extends Controller
         $str_url = preg_replace("/[\s-]+/", "-", $str_url); 
         $str_url = preg_replace("/[\s_]/", "-", $str_url);
 
-        $filename = '';
-        $filename1 = '';
+        $filename = '';$filename1 = '';
+        $filename2 = '';$filename21 = '';
         $destinationpath = 'images/category/';
         if (request()->file('cat_des_image') != '' || request()->file('cat_des_image') != null) {
             if (request()->file('cat_des_image')->isValid()) {
@@ -252,12 +341,33 @@ class AdminController extends Controller
                 $filename1 = $filename . '_' . rand(11111, 99999) . '.' . $extension1;
                 request()->file('cat_des_image')->move($destinationpath, $filename1);
 
-                $image_path = asset('images/category/' . $data->cat_des_image);
+                $image_path = 'images/category/' . $data->cat_des_image;
                 if (File::exists($image_path)) {
                     File::delete($image_path);
                 }
 
                 DB::table('cat_description')->where('id', $id)->update(['cat_des_image' => $filename1]);
+            }
+        }
+
+        if (request()->file('cat_des_ban_image') != '' || request()->file('cat_des_ban_image') != null) {
+            if (request()->file('cat_des_ban_image')->isValid()) {
+                $file = request()->file('cat_des_ban_image')->getClientOriginalName();
+                $filename2 = pathinfo($file, PATHINFO_FILENAME);
+                $filename2 = strtolower($filename2);
+                $filename2 = preg_replace("/[^a-z0-9_\s-]/", "", $filename2);
+                $filename2 = preg_replace("/[\s-]+/", " ", $filename2);
+                $filename2 = preg_replace("/[\s_]/", "-", $filename2);
+                $extension1 = request()->file('cat_des_ban_image')->getClientOriginalExtension();
+                $filename21 = $filename2 . '_' . rand(11111, 99999) . '.' . $extension1;
+                request()->file('cat_des_ban_image')->move($destinationpath, $filename21);
+
+                $image_path = 'images/category/' . $data->cat_des_ban_image;
+                if (File::exists($image_path)) {
+                    File::delete($image_path);
+                }
+
+                DB::table('cat_description')->where('id', $id)->update(['cat_des_ban_image' => $filename21]);
             }
         }
 
@@ -364,7 +474,7 @@ class AdminController extends Controller
                 request()->file('p_image')->move($destinationpath, $filename1);
 
                 $data = DB::table('portfolio')->where(['id' => $request->id])->select('p_image')->first();
-                $image_path = asset('images/portfolio/' . $data->p_image);
+                $image_path = 'images/portfolio/' . $data->p_image;
                 if (File::exists($image_path)) {
                     File::delete($image_path);
                 }
@@ -532,6 +642,102 @@ class AdminController extends Controller
         $request->session()->flash('response_type', 'success');
         return redirect()->back();
         }
+    }
+
+
+    /* Testimonials */
+
+    public function testimonials()
+    {
+        $testimonials = DB::table('testimonials')->orderByDesc('id')->get();
+        return view('admin_pages.testimonials', compact('testimonials'));
+    }
+
+    public function testimonial_add(Request $request)
+    {
+        $filename = '';$filename1 = '';
+        $destinationpath = 'images/testimonials/';
+        if (request()->file('t_image') != '' || request()->file('t_image') != null) {
+            if (request()->file('t_image')->isValid()) {
+                $file = request()->file('t_image')->getClientOriginalName();
+                $filename = pathinfo($file, PATHINFO_FILENAME);
+                $filename = strtolower($filename);
+                $filename = preg_replace("/[^a-z0-9_\s-]/", "", $filename);
+                $filename = preg_replace("/[\s-]+/", " ", $filename);
+                $filename = preg_replace("/[\s_]/", "-", $filename);
+                $extension1 = request()->file('t_image')->getClientOriginalExtension();
+                $filename1 = $filename . '_' . rand(11111, 99999) . '.' . $extension1;
+                request()->file('t_image')->move($destinationpath, $filename1);
+            }
+        }
+
+        $array = array(
+            't_heading' => $request->t_heading,
+            't_description' => $request->t_description,
+            't_name' => $request->t_name,
+            't_image' => $filename1
+        );
+        DB::table('testimonials')->insert($array);
+        $request->session()->flash('response_msg', 'Testimonial added successfully !!'); 
+        $request->session()->flash('response_type', 'success');
+        return redirect()->back(); 
+
+    }
+
+    public function testimonial_delete(Request $request, $id)
+    {
+        
+        $data = DB::table('testimonials')->where('id' ,$id)->select('t_image')->first();
+        $image_path = 'images/testimonials/' . $data->t_image;
+        if (File::exists($image_path)) {
+            File::delete($image_path);
+        }
+        DB::table('testimonials')->where(['id' => $id])->delete();
+        $request->session()->flash('response_msg', 'Testimonial deleted successfully !!');
+        $request->session()->flash('response_type', 'success');
+        return redirect()->back();
+       
+    }
+
+    public function testimonial_update(Request $request)
+    {
+        $id = $request->input('testimonial_id');
+
+        DB::table('testimonials')->where('id', $id)->update([
+            't_heading' => $request->t_heading,
+            't_description' => $request->t_description,
+            't_name' => $request->t_name
+        ]);
+
+        $filename = '';$filename1 = '';
+        $destinationpath = 'images/testimonials/';
+
+        if ($request->hasFile('t_image')) {
+            if ($request->file('t_image')->isValid()) {
+                $file = $request->file('t_image')->getClientOriginalName();
+                $filename = pathinfo($file, PATHINFO_FILENAME);
+                $filename = strtolower($filename);
+                $filename = preg_replace("/[^a-z0-9_\s-]/", "", $filename);
+                $filename = preg_replace("/[\s-]+/", " ", $filename);
+                $filename = preg_replace("/[\s_]/", "-", $filename);
+                $extension1 = $request->file('t_image')->getClientOriginalExtension();
+                $filename1 = $filename . '_' . rand(11111, 99999) . '.' . $extension1;
+                $request->file('t_image')->move($destinationpath, $filename1);
+
+                $data = DB::table('testimonials')->where(['id' => $id])->select('t_image')->first();
+                $image_path = 'images/testimonials/' . $data->t_image;
+                if (File::exists($image_path)) {
+                    File::delete($image_path);
+                }
+                File::delete($image_path);
+
+                DB::table('testimonials')->where('id', $id)->update(['t_image' => $filename1]);
+            }
+        }
+
+        $request->session()->flash('response_msg', 'Testimonial updated successfully !!'); 
+        $request->session()->flash('response_type', 'success');
+        return redirect()->back();
     }
 
 

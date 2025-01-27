@@ -43,7 +43,9 @@
                                     <tr>
                                         <th width="30">#</th>
                                         <th>Heading</th>
-                                        <th>Image</th>
+                                        <th>Thumbnail Image</th>
+                                        <th>Banner Image</th>
+                                        <th>Home Page</th>
                                         <th>
                                             <center>Action</center>
                                         </th>
@@ -56,6 +58,9 @@
                                         <td>{{ $category->cat_name }}</td>
                                         <td><img src="{{ asset('images/category/' . $category->cat_image) }}"
                                                 style="height:100px;"></td>
+                                        <td><img src="{{ asset('images/category/' . $category->cat_ban_image) }}"
+                                                style="height:100px;"></td>
+                                        <td><input type="checkbox" class="form-control" onclick="is_home('{{$category->id}}')" {{($category->is_home == 1)?'checked':''}} ></td>
                                         <td>
                                             <center>
                                                 <button class="btn btn-warning btn-sm color-white"
@@ -121,8 +126,14 @@
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="cat_image">Image</label>
+                                <label for="cat_image">Thumbnail Image</label>
                                 <input type="file" name="cat_image" id="cat_image" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="cat_ban_image">Banner Image</label>
+                                <input type="file" name="cat_ban_image" id="cat_ban_image" class="form-control" required>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -178,10 +189,21 @@
 
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="title">Image</label>
+                                <label for="cat_image">Thumbnail Image</label>
                                 <input type="file" class="form-control" name="cat_image" id="cat_image">
                                 <?php if (isset($category->cat_image)) { ?>
                                     <img src="{{ asset('images/category/' . $category->cat_image) }}"
+                                        style="height:100px;" class="img-responsive">
+                                <?php } ?>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="cat_ban_image">Banner Image</label>
+                                <input type="file" name="cat_ban_image" id="cat_ban_image" class="form-control" required>
+                                <?php if (isset($category->cat_ban_image)) { ?>
+                                    <img src="{{ asset('images/category/' . $category->cat_ban_image) }}"
                                         style="height:100px;" class="img-responsive">
                                 <?php } ?>
                             </div>
@@ -244,7 +266,14 @@
 
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="cat_des_cimg">Images</label>
+                                <label for="cat_des_ban_image">Banner Image</label>
+                                <input type="file" name="cat_des_ban_image" id="cat_des_ban_image" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="cat_des_cimg">Gallery Images</label>
                                 <input type="file" name="cat_des_cimg[]" id="cat_des_cimg" class="form-control" multiple required>
                             </div>
                         </div>
@@ -290,5 +319,21 @@
             "responsive": true,
         });
     });
+</script>
+<script>
+    function is_home(id){
+        
+        $.ajax({
+            type: "GET",
+            url: "{{url('admin/is_home')}}/"+id,
+            success: function( data ) {
+              if(data.success){
+                toastr.success('Data saved!')
+              }else{
+                toastr.error('Failed to save data!')
+              }
+            }
+        });
+    }
 </script>
 @endsection

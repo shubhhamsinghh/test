@@ -15,7 +15,7 @@ use App\Http\Controllers\AdminController;
 |
 */
 
-Route::get('/', [HomeController::class, 'default'])->name('index'); 
+Route::get('/', [HomeController::class, 'index'])->name('index'); 
 // Route::get('thank_you', [HomeController::class, 'thank_you'])->name('thank_you');
 // Route::get('product/{cat_url}/{sub_cat?}/{product?}', [HomeController::class, 'get_product'])->name('home_get_product');
 // Route::get('contact-us', [HomeController::class, 'contact_us'])->name('contact');
@@ -33,6 +33,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/category-add', [AdminController::class, 'category_add'])->name('category_add');
     Route::post('/category-update', [AdminController::class, 'category_update'])->name('category_update');
     Route::get('/category-delete/{id}', [AdminController::class, 'category_delete'])->name('category_delete');
+    Route::get('/is_home/{id}', [AdminController::class, 'is_home'])->name('is_home');
     Route::get('/category-detail/{url}', [AdminController::class, 'category_detail'])->name('category_detail');
     Route::post('/category-detail-add', [AdminController::class, 'category_detail_add'])->name('category_detail_add');
     Route::post('/category-detail-edit/{id}', [AdminController::class, 'category_detail_update'])->name('category_detail_update');
@@ -51,10 +52,20 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/portfolio-detail-update', [AdminController::class, 'portfolio_detail_update'])->name('portfolio_detail_update');
     Route::get('/portfolio-detail-delete/{id}', [AdminController::class, 'portfolio_detail_delete'])->name('portfolio_detail_delete');
 
+
+    //================ Testimonials =============================
+
+    Route::get('/testimonials', [AdminController::class, 'testimonials'])->name('testimonials');
+    Route::post('/testimonial-add', [AdminController::class, 'testimonial_add'])->name('testimonial_add');
+    Route::post('/testimonial-update', [AdminController::class, 'testimonial_update'])->name('testimonial_update');
+    Route::get('/testimonial-delete/{id}', [AdminController::class, 'testimonial_delete'])->name('testimonial_delete');
+
      //=========== Enquiries Route ======================
     Route::get('/enquiries', [AdminController::class, 'enquiries'])->name('enquiries');
     Route::get('/enquiry-delete/{id}', [AdminController::class, 'enq_delete'])->name('enq_delete');
 
+    Route::get('/company-info', [AdminController::class, 'company_info'])->name('company_info');
+    Route::post('/company-info', [AdminController::class, 'company_info_update'])->name('company_info_update');
     Route::get('/change-password', [AdminController::class, 'change_password'])->name('change_password');
     Route::post('/change-password', [AdminController::class, 'update_password'])->name('update_password');
     Route::get('/admin_logout', [AdminController::class, 'admin_logout'])->name('admin_logout');

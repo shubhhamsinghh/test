@@ -107,12 +107,27 @@
                         </li>
                         
                         <li class="nav-item">
+                            <a href="{{ route('testimonials') }}"
+                                class="nav-link {{ request()->route()->getName() == 'testimonials' ? 'active' : '' }}">
+                                <i class="fas fa-layer-group nav-icon"></i>
+                                <p>Testimonials</p>
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
                             <a href="{{ route('enquiries') }}"
                                 class="nav-link {{ request()->route()->getName() == 'enquiries' ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-question-circle"></i>
                                 <p>Enquiry</p>
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a href="{{route('company_info')}}" class="nav-link {{request()->route()->getName() == 'company_info'?'active':''}}">
+                            <i class="nav-icon fas fa-building"></i>
+                            <p>Company Info</p>
+                            </a>
+                       </li>
 
                     </ul>
                 </nav>

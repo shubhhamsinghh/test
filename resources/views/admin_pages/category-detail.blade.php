@@ -43,7 +43,8 @@
                                         <tr>
                                             <th width="30">#</th>
                                             <th>Heading</th>
-                                            <th>Image</th>
+                                            <th>Cover Image</th>
+                                            <th>Banner Image</th>
                                             <th>
                                                 <center>Action</center>
                                             </th>
@@ -57,6 +58,9 @@
                                                 <td>{{ $category->cat_dec_heading }}</td>
                                                 <td><img src="{{ asset('images/category/' . $category->cat_des_image) }}"
                                                         style="height:100px;"></td>
+                                                <td><img src="{{ asset('images/category/' . $category->cat_des_ban_image) }}"
+                                                        style="height:100px;"></td>
+                                                
                                                 <td>
                                                     <center>
                                                       <button class="btn btn-warning btn-sm color-white"
@@ -115,7 +119,14 @@
 
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="cat_des_cimg">Images</label>
+                                <label for="cat_des_ban_image">Banner Image</label>
+                                <input type="file" name="cat_des_ban_image" id="cat_des_ban_image" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="cat_des_cimg">Gallery Images</label>
                                 <input type="file" name="cat_des_cimg[]" id="cat_des_cimg" class="form-control" multiple required>
                             </div>
                         </div>
@@ -161,7 +172,7 @@
                 @csrf
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label for="cat_dec_heading">Heading</label>
                                 <input type="text" class="form-control" name="cat_dec_heading" id="cat_dec_heading" value="{{$category->cat_dec_heading}}" required minlength="3">
@@ -178,6 +189,17 @@
                             </div>
                         </div>
 
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="cat_des_ban_image">Banner Image</label>
+                                <input type="file" name="cat_des_ban_image" id="cat_des_ban_image" class="form-control">
+                                <?php if(isset($category->cat_des_ban_image)){ ?>
+                                    <img src="{{ asset('images/category/' . $category->cat_des_ban_image) }}"
+                                        style="height:100px;" class="img-responsive"> 
+                                    <?php } ?>
+                            </div>
+                        </div>
+                        
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="cat_dec_description">Description</label>
@@ -193,8 +215,8 @@
 
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="cat_des_cimg">Images</label>
-                                <input type="file" name="cat_des_cimg[]" id="cat_des_cimg" class="form-control" multiple required>
+                                <label for="cat_des_cimg">Gallery Images</label>
+                                <input type="file" name="cat_des_cimg[]" id="cat_des_cimg" class="form-control" multiple >
                                 <div class="image-container{{$category->id}}">
                                 <?php if(isset($category->cat_images)){ 
                                     foreach($category->cat_images as $img){ ?>

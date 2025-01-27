@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 26, 2025 at 02:45 PM
+-- Generation Time: Jan 27, 2025 at 11:13 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -32,9 +32,18 @@ CREATE TABLE `category` (
   `cat_name` varchar(255) NOT NULL,
   `cat_url` varchar(255) NOT NULL,
   `cat_image` varchar(255) NOT NULL,
+  `cat_ban_image` varchar(255) NOT NULL,
   `cat_description` text DEFAULT NULL,
-  `cat_meta` text DEFAULT NULL
+  `cat_meta` text DEFAULT NULL,
+  `is_home` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `category`
+--
+
+INSERT INTO `category` (`id`, `cat_name`, `cat_url`, `cat_image`, `cat_ban_image`, `cat_description`, `cat_meta`, `is_home`) VALUES
+(3, 'Testing', 'testing', 'about1_12946.png', 'about-us-img_96867.png', 'Description', '<meta>', 0);
 
 -- --------------------------------------------------------
 
@@ -48,9 +57,17 @@ CREATE TABLE `cat_description` (
   `cat_dec_heading` varchar(255) NOT NULL,
   `cat_dec_url` varchar(255) NOT NULL,
   `cat_des_image` varchar(255) NOT NULL,
+  `cat_des_ban_image` varchar(255) NOT NULL,
   `cat_dec_description` text DEFAULT NULL,
   `cat_dec_meta` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `cat_description`
+--
+
+INSERT INTO `cat_description` (`id`, `category_id`, `cat_dec_heading`, `cat_dec_url`, `cat_des_image`, `cat_des_ban_image`, `cat_dec_description`, `cat_dec_meta`) VALUES
+(4, 3, 'T-One', 't-one', 'banner2_78140.png', 'about-us-img_30016.png', 'Descr-11', NULL);
 
 -- --------------------------------------------------------
 
@@ -73,7 +90,34 @@ INSERT INTO `cat_des_images` (`id`, `category_id`, `cat_des_id`, `cat_des_cimg`)
 (16, 1, 1, 'deepika_42188.jpg'),
 (20, 1, 2, 'mohit_84678.jpg'),
 (22, 1, 3, 'seo-content-writing_17633.png'),
-(24, 1, 3, 'webdevelopment_65402.png');
+(24, 1, 3, 'webdevelopment_65402.png'),
+(25, 3, 4, 'blog_72038.png'),
+(28, 3, 4, 'contact_16608.png');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `company_info`
+--
+
+CREATE TABLE `company_info` (
+  `id` int(11) NOT NULL,
+  `comp_email1` varchar(100) DEFAULT NULL,
+  `comp_contact1` varchar(20) DEFAULT NULL,
+  `comp_address` varchar(300) DEFAULT NULL,
+  `comp_map` text DEFAULT NULL,
+  `comp_sm1` varchar(300) DEFAULT NULL,
+  `comp_sm2` varchar(300) DEFAULT NULL,
+  `comp_sm3` varchar(300) DEFAULT NULL,
+  `comp_sm4` varchar(300) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `company_info`
+--
+
+INSERT INTO `company_info` (`id`, `comp_email1`, `comp_contact1`, `comp_address`, `comp_map`, `comp_sm1`, `comp_sm2`, `comp_sm3`, `comp_sm4`) VALUES
+(1, 'test@email.com', '9991562536', 'Company Address', NULL, 'https://www.facebook.com/', 'https://www.instagram.com/', 'https://www.linkedin.com/company/', 'https://twitter.com/');
 
 -- --------------------------------------------------------
 
@@ -149,6 +193,27 @@ INSERT INTO `tabs` (`id`, `tab`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `testimonials`
+--
+
+CREATE TABLE `testimonials` (
+  `id` int(11) NOT NULL,
+  `t_heading` text NOT NULL,
+  `t_description` text NOT NULL,
+  `t_name` varchar(255) NOT NULL,
+  `t_image` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `testimonials`
+--
+
+INSERT INTO `testimonials` (`id`, `t_heading`, `t_description`, `t_name`, `t_image`) VALUES
+(1, 'TEST', 'TESTING', 'Hardik Gandu', 'bookeeping-accounting_99622.jpg');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -193,6 +258,12 @@ ALTER TABLE `cat_des_images`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `company_info`
+--
+ALTER TABLE `company_info`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `contact`
 --
 ALTER TABLE `contact`
@@ -217,6 +288,12 @@ ALTER TABLE `tabs`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `testimonials`
+--
+ALTER TABLE `testimonials`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -231,19 +308,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `cat_description`
 --
 ALTER TABLE `cat_description`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `cat_des_images`
 --
 ALTER TABLE `cat_des_images`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+
+--
+-- AUTO_INCREMENT for table `company_info`
+--
+ALTER TABLE `company_info`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `contact`
@@ -268,6 +351,12 @@ ALTER TABLE `port_details`
 --
 ALTER TABLE `tabs`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `testimonials`
+--
+ALTER TABLE `testimonials`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`

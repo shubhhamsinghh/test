@@ -58,7 +58,22 @@
                         <!-- small box -->
                         <div class="small-box bg-danger">
                             <div class="inner">
-                                <h3>{{ $a2 }}</h3>
+                                <h3>{{ $a5 }}</h3>
+                                <p>Testimonials</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-layer-group"></i>
+                            </div>
+                            <a href="{{ route('testimonials') }}" class="small-box-footer">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-primary">
+                            <div class="inner">
+                                <h3>{{ $a3 }}</h3>
                                 <p>Enquiry</p>
                             </div>
                             <div class="icon">
@@ -69,7 +84,20 @@
                         </div>
                     </div>
 
-
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h3>{{ $a4 }}</h3>
+                                <p>Company Info</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <a href="{{ route('company_info') }}" class="small-box-footer">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
 
                     <!-- ./col -->
                 </div>
