@@ -12,9 +12,12 @@ class Category extends Model
 
     public $timestamps = false;
 
-
     public function cat_description(){
         return $this->hasMany(Cat_Description::class);
     }
+
+    // public function home_images(){
+    //     return $this->hasMany(Cat_Description::class)->where('is_home', 1);
+    // }
 
 }

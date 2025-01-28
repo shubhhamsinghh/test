@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Blog;
 use App\Models\Contact;
-use App\Models\Career;
 use App\Models\Category;
-use App\Models\Product;
-use App\Models\Sub_Category;
+use App\Models\Cat_Description;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -21,17 +18,9 @@ class HomeController extends Controller
 
     public function index()
     {
-        return redirect('/login');
-        // $categories = Category::get();
-        // $products = Product::with('category', 'sub_category')->where('is_trending', '1')->get();
-        // // $tab_products = Product::with('category', 'sub_category')->where('tab_product', '1')->get(); tab_products
-        // return view('web_pages.index', compact('categories', 'products'));
-        
-    }
-
-    public function contact_us()
-    {
-        return view('web_pages.contact');
+        $cats = Cat_Description::where('is_home',1)->get();
+        $videos = DB::table('port_details')->orderby('id','desc')->paginate(5);
+        return view('web_pages.index',compact('cats','videos'));
     }
 
     public function about_us()
@@ -39,56 +28,46 @@ class HomeController extends Controller
         return view('web_pages.about');
     }
 
-    public function certification()
+    public function cinematography()
     {
-        return view('web_pages.certification');
+        return view('web_pages.cinematography');
+    }
+
+    public function portfolio($url,$url2=null)
+    {
+        return view('web_pages.portfolio');
+    }
+
+    public function contact_us()
+    {
+        return view('web_pages.contact');
     }
 
     public function contact_add(Request $request)
     {
-        // $data = [
-        //     'name' => $request->name,
-        //     'phone' => $request->phone,
-        //     'email' => $request->email,
-        //     'message' => $request->message,
-        // ];
-
-
-        // $user['to'] = 'ajangra182@gmail.com';
-
-        // Mail::send('web_pages.form_mail', ['name' => $data['name'], 'email' => $data['email'], 'phone' => $data['phone'], 'msg' => $data['message']], function ($message) use ($user) {
-        //     $message->to($user['to']);
-        //     $message->subject('Meditechealthcare Contact Form');
-        // });
     
-    
-$to = "mhchisar@gmail.com";
-$subject = "Meditechealthcare Contact Form";
-$html = 'Hello Admin, 
-<p><b>Name: </b> '.$request->name.'</p>
-<p><b>Email: </b> '.$request->email.'</p>
-<p><b>Phone: </b> '.$request->phone.'</p>
-<p><b>Message: '.$request->message.'</b> </p>
+        // $to = "ajaysingh@gmail.com";
+        // $subject = "Oberoi Production";
+        // $html = 'Hello Admin, 
+        // <p><b>Name: </b> '.$request->name.'</p>
+        // <p><b>Email: </b> '.$request->email.'</p>
+        // <p><b>Phone: </b> '.$request->phone.'</p>
 
-Thank You,
-<br>
-<p>'.config('app.name').'</p>';
+        // Thank You,
+        // <br>
+        // <p>'.config('app.name').'</p>';
 
 
-$headers = "MIME-Version: 1.0" . "\r\n";
-$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-$headers .= "From: Meditechealthcare <meditechhealthcarehsr@gmail.com>";
+        // $headers = "MIME-Version: 1.0" . "\r\n";
+        // $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+        // $headers .= "From: Oberoi Production <oberoi.productiontts@gmail.com>";
 
-mail($to,$subject,$html,$headers);
-
-
-
+        // mail($to,$subject,$html,$headers);
 
         $contact = new Contact();
         $contact->name = $request->name;
         $contact->phone = $request->phone;
         $contact->email = $request->email;
-        $contact->message = $request->message;
         $contact->save();
 
         return redirect()->route('thank_you');

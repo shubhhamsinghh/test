@@ -1,147 +1,106 @@
-<link rel="icon" type="image/x-icon" href="{{ asset('assets/img/logo/favicon.png') }}">
-<!-- css -->
-<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/all-fontawesome.min.css?v2') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/animate.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/magnific-popup.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/owl.carousel.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/nice-select.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/style.css?v11') }}">
-</head>
+<link rel="apple-touch-icon" href="{{asset('img/home-one/apple-touch-icon.html')}}">
+		<link rel="shortcut icon" type="image/x-icon" href="{{asset('img/favicon.ico')}}">
+        <!-- Place favicon.ico in the root directory -->
+		<!-- all css here -->
+        <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
+        <link rel="stylesheet" href="{{asset('css/font-awesome.min.css')}}">
+        <link rel="stylesheet" href="{{asset('css/icofont.css')}}">
+        <link rel="stylesheet" href="{{asset('css/magnific-popup.css')}}">
+        <link rel="stylesheet" href="{{asset('css/meanmenu.min.css')}}">
+		<link rel="stylesheet" href="{{asset('css/plugins.cs')}}s">
+        <link rel="stylesheet" href="{{asset('css/shortcode/shortcodes.css')}}">
+        <link rel="stylesheet" href="{{asset('css/style.css')}}">
+        <link rel="stylesheet" href="{{asset('css/responsive.css')}}">
+        <link rel="stylesheet" href="{{asset('fonts/stylesheet.css')}}">
+		
+		<!-- Revolution Slider CSS -->
+		<link href="{{asset('assets/revolution/css/settings.css')}}" rel="stylesheet">
+		<link href="{{asset('assets/revolution/css/navigation.css')}}" rel="stylesheet">
+		<link href="{{asset('assets/revolution/custom-setting.css')}}" rel="stylesheet">
 
-<body>
-    <header class="header">
-        <div class="header-top">
-            <div class="container">
-                <div class="header-top-wrapper">
-                    <div class="row">
-                        <div class="col-12 col-md-6 col-lg-6 col-xl-7">
-                            <div class="header-top-left">
-                                <ul class="header-top-list">
-                                    <li><a href="mailto:mhchisar@gmail.com"><i
-                                                class="far fa-envelopes"></i>
-                                            <span class="__cf_email__">mhchisar@gmail.com</span></a></li>
-                                    <li class="secondary_mail"><a href="mailto:meditechhealthcarehsr@gmail.com"><i
-                                                class="far fa-envelopes"></i>
-                                            <span class="__cf_email__">meditechhealthcarehsr@gmail.com</span></a></li>
-                                    <!--<li><a href="tel:+919802300540"><i class="far fa-headset"></i> +91 980 230 0540</a>-->
-                                    <!--</li>-->
-                                    <li><a href="tel:+917015642820"><i class="far fa-headset"></i> +91 701 564 2820</a>
-                                    </li>
-                                    <li class="help"><a href="#"data-bs-toggle="modal" data-bs-target="#quickview" ><i class="far fa-comment-question"></i> Need
-                                            Help?</a>
-                                    </li>
-                                    
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-6 col-xl-5">
-                            <div class="header-top-right">
-                                <ul class="header-top-list">
-                                    <li class="social">
-                                        <div class="header-top-social">
-                                            <span>Follow Us: </span>
-                                            <a href="#"><i class="fab fa-facebook"></i></a>
-                                            <!-- <a href="#"><i class="fab fa-x-twitter"></i></a> -->
-                                            <a target="_blank" href="https://www.instagram.com/meditechhealthcarehsr/?igsh=dGVzaGVieDgzdmRv"><i class="fab fa-instagram"></i></a>
-                                            <a href="#"><i class="fab fa-linkedin"></i></a>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- header top end -->
-        <!-- navbar -->
-        <div class="main-navigation">
-            <nav class="navbar navbar-expand-lg">
-                <div class="container position-relative">
-                    <a class="navbar-brand" href="{{route('index')}}">
-                        <img src="{{asset('assets/img/logo/logo.png')}}" alt="logo">
-                    </a>
-                    <div class="mobile-menu-right">
-                        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
-                            data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar"
-                            aria-label="Toggle navigation">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </button>
-                    </div>
-                    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar"
-                        aria-labelledby="offcanvasNavbarLabel">
-                        <div class="offcanvas-header">
-                            <a href="index.html" class="offcanvas-brand" id="offcanvasNavbarLabel">
-                                <img src="{{ asset('assets/img/logo/logo.png') }}" alt="">
-                            </a>
-                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="offcanvas-body">
-                            <ul class="navbar-nav justify-content-end flex-grow-1">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('index') }}">Home</a>
-                                </li>
-                                <li class="nav-item"><a class="nav-link" href="{{ route('about') }}">About</a></li>
-                                <?php
-                                use App\Models\Category;
-                                $categories = Category::with('sub_cat_order')->get();
-                                ?>
-                                <li class="nav-item mega-menu dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#"
-                                        data-bs-toggle="dropdown">Products</a>
-                                    <div class="dropdown-menu fade-down">
-                                        <div class="mega-content">
-                                            <div class="container-fluid px-lg-0">
-                                                <div class="row space-between" style="align-items:flex-start">
-                                                    @foreach ($categories as $cat)
-                                                        <div class="col-12 col-lg-3">
-                                                            <h5 class="mega-menu-title">{{ $cat->cat_name }}</h5>
-                                                            @if(count($cat->sub_cat_order) > 0)
-                                                                @foreach ($cat->sub_cat_order as $sub_cat)
-                                                                    <ul class="mega-menu-item">
-                                                                        <li><a class="dropdown-item"
-                                                                                href="{{ route('home_get_product', ['cat_url' => $cat->cat_url, 'sub_cat' => $sub_cat->sub_cat_url]) }}">{{ $sub_cat->sub_cat_name }}</a>
-                                                                        </li>
-                                                                    </ul>
-                                                                @endforeach
-                                                            @endif
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="nav-item"><a class="nav-link"
-                                        href="{{ route('certification') }}">Certifications</a></li>
-                                <li class="nav-item"><a class="nav-link" href="{{ route('contact') }}">Contact</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
-        <!-- navbar end -->
-
-    </header>
-    <!-- header area end -->
-
-
-    <!-- popup search -->
-    <div class="search-popup">
-        <button class="close-search"><span class="far fa-times"></span></button>
-        <form action="#">
-            <div class="form-group">
-                <input type="search" name="search-field" class="form-control" placeholder="Search Here..."
-                    required>
-                <button type="submit"><i class="far fa-search"></i></button>
-            </div>
-        </form>
-    </div>
-    <!-- popup search end -->
+        <script src="{{asset('js/vendor/modernizr-2.8.3.min.js')}}"></script>
+    </head>
+    <body>
+        <div class="page-wraper home-production two-blck default-bg" id="main-home">
+			<!-- Header Area Start -->
+			<header>
+				<!-- Header Menu Area Start -->
+				<div class="header-menu header header-style-2" id="sticky-header">
+					<div class="container-fluid pl-135 pr-150">
+						<div class="row align-items-center">
+							<!-- Menu Area Start -->
+							<div class="col d-lg-block d-md-none d-sm-none d-none">
+								<div class="main-menu text-left">
+									<nav>
+										<ul>
+											<li class="{{ request()->route()->getName() == 'index' ? 'active' : '' }}">
+                                                <a href="{{route('index')}}">Home</a>
+											</li>
+											<li class="{{ request()->route()->getName() == 'about' ? 'active' : '' }}"><a href="{{route('about')}}">About</a></li>
+											<li class="{{ request()->route()->getName() == 'web_portfolio' ? 'active' : '' }}"><a href="#">Portfolio</a>
+												<ul>
+												   @foreach($categories as $category)
+												   <li  class="{{ request()->route()->getName() == 'web_portfolio' ? 'active' : '' }}"><a href="{{route('web_portfolio',['url' => $category->cat_url])}}">{{$category->cat_name}}</a></li>
+												   @endforeach
+													<li class="{{ request()->route()->getName() == 'cinematography' ? 'active' : '' }}"><a href="{{route('cinematography')}}">Cinematography</a></li>
+												</ul>
+											</li>
+											<li class="{{ request()->route()->getName() == 'contact' ? 'active' : '' }}"><a href="{{route('contact')}}">Contact</a></li>
+										</ul>
+									</nav>
+								</div>
+							</div>
+							<!-- Logo Area Start -->
+							<div class="col col-md-auto">
+								<div class="logo-img">
+									<a href="{{route('index')}}"><img src="{{asset('img/home-one/icon/logo.png')}}" alt=""></a>
+								</div>
+							</div>
+							<!-- Logo Area End -->
+							<div class="col align-self-center d-lg-block d-md-block d-sm-none d-none">
+								<div class="pro-mre-btn text-right">
+									<a href="tel:{{$company_info->comp_contact1}}">Call Now</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- MOBILE-MENU-AREA START --> 
+					<div class="mobile-menu-area">
+						<div class="container">
+							<div class="row">
+								<div class="col-md-12 col-sm-12">
+									<div class="mobile-area">
+										<div class="mobile-menu">
+											<nav id="mobile-nav">
+												<ul>
+													<li class="active">
+                                                        <a href="{{route('index')}}">Home</a>
+													</li>
+													<li><a href="{{route('about')}}">About</a></li>
+													<li><a href="#">Portfolio</a>
+													   <ul>
+														@foreach($categories as $category)
+														<li><a href="{{route('web_portfolio',['url' => $category->cat_url])}}">{{$category->cat_name}}</a></li>
+													    @endforeach
+														<li><a href="{{route('cinematography')}}">Cinematography</a></li>
+													  </ul>
+													</li>
+													<!-- <li>
+                                                        <a href="portfolio.php"> Portfolio </a>
+													</li> -->
+													<li><a href="{{route('contact')}}">Contact</a></li>
+												</ul>
+											</nav>
+										</div>	
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- MOBILE-MENU-AREA END  -->
+				</div>
+				<!-- Header Menu Area Start -->
+				<!-- Slider Area Start -->
+				
+				<!-- Slider Area End -->
+			</header>

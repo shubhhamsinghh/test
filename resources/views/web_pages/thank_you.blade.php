@@ -1,27 +1,26 @@
 @extends('layouts.web_layout')
-@section('title')
-    Thank You
-@endsection
-@section('keywords')
-    Thank You
-@endsection
-@section('description')
-    Thank You
+@section('header')
+    <title> Thank You </title> 
+
 @endsection
 @section('content')
-    <!-- breadcrumb -->
-    <!--<div class="site-breadcrumb">-->
-    <!--    <div class="site-breadcrumb-bg" style="background: url(assets/img/breadcrumb/01.jpg)"></div>-->
-    <!--    <div class="container">-->
-    <!--        <div class="site-breadcrumb-wrap">-->
-    <!--            <h4 class="breadcrumb-title">Thank you</h4>-->
-    <!--            <ul class="breadcrumb-menu">-->
-    <!--                <li><a href="index.html"><i class="far fa-home"></i> Home</a></li>-->
-    <!--                <li class="active">Thank you</li>-->
-    <!--            </ul>-->
-    <!--        </div>-->
-    <!--    </div>-->
-    <!--</div>-->
+<div class="page-content">
+            <!-- Breadcamb Area Start -->
+            <section class="breadcamb-area bg-17 bg-overlay-1">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="bradcamb-content text-center text-white text-uppercase">
+                                <h1>Thank You</h1>
+                                <ul>
+                                    <li><a href="{{route('index')}}">HOME <span>/</span></a></li>
+                                    <li>Thank You</li>
+                                </ul>	
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
     <div class="error-area py-100">
         <div class="container">
             <div class="col-md-6 mx-auto">
@@ -36,5 +35,6 @@
             </div>
         </div>
     </div>
+</div>
     <!-- breadcrumb end -->
 @endsection

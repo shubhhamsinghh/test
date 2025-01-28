@@ -1,28 +1,33 @@
-<form class="" role="form" method="post" autocomplete="off" action="{{ url('contact_add') }}"
-    enctype="multipart/form-data">
-    @csrf
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <input type="text" class="form-control" name="name" placeholder="Your Name" required>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <input type="email" class="form-control" name="email" placeholder="Your Email" required>
-            </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <input type="text" class="form-control" name="phone" placeholder="Your Phone"
-            onkeypress="javascript:return isNumberKey(event)" maxlength="10" required placeholder="Phone" required>
-    </div>
-    <div class="form-group">
-        <textarea name="message" cols="30" rows="4" class="form-control" placeholder="Write Your Message"></textarea>
-    </div>
-    <button type="submit" class="theme-btn">Send
-        Message <i class="far fa-paper-plane"></i></button>
-    <div class="col-md-12 my-3">
-        <div class="form-messege text-success"></div>
-    </div>
-</form>
+<section class="contact-us-area pb-60">
+                <div class="container">
+                    <div class="blog-reply-wrapper mt-50">
+                        <h4 class="blog-dec-title">POST A COMMENT</h4>
+                        <form action="{{route('contact_add')}}" method="post">
+                            @csrf
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="leave-form">
+                                        <input type="text" placeholder="Full Name*" name="name" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="leave-form">
+                                        <input type="email" placeholder="Eail Address*" name="email" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="leave-form">
+                                        <input type="text" placeholder="Phone No*" name="phone" required onkeypress="return isNumberKey(event)">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="text-leave">
+                                        <input type="submit" value="SEND MASSAGE">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </section>

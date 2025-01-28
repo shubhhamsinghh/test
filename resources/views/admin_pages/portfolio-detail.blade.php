@@ -44,7 +44,7 @@
                                             <th width="30">#</th>
                                             <th>Tab</th>
                                             <th>Heading</th>
-                                            <th>Image</th>
+                                            <th>Cover Image</th>
                                             <th>
                                                 <center>Action</center>
                                             </th>

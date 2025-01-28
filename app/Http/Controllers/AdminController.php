@@ -67,7 +67,6 @@ class AdminController extends Controller
             'comp_sm1' => $request->c_sm1,
             'comp_sm2' => $request->c_sm2,
             'comp_sm3' => $request->c_sm3,
-            'comp_sm4' => $request->c_sm4,
         );
         $company_info = DB::table('company_info')->where('id',1)->update($company_info);
         $request->session()->flash('response_msg', 'Company Info updated successfully !!'); //success,info,error,warning
@@ -106,17 +105,17 @@ class AdminController extends Controller
             }
         }
 
-        if (request()->file('cat_image') != '' || request()->file('cat_image') != null) {
-            if (request()->file('cat_image')->isValid()) {
-                $file = request()->file('cat_image')->getClientOriginalName();
+        if (request()->file('cat_ban_image') != '' || request()->file('cat_ban_image') != null) {
+            if (request()->file('cat_ban_image')->isValid()) {
+                $file = request()->file('cat_ban_image')->getClientOriginalName();
                 $filename2 = pathinfo($file, PATHINFO_FILENAME);
                 $filename2 = strtolower($filename2);
                 $filename2 = preg_replace("/[^a-z0-9_\s-]/", "", $filename2);
                 $filename2 = preg_replace("/[\s-]+/", " ", $filename2);
                 $filename2 = preg_replace("/[\s_]/", "-", $filename2);
-                $extension1 = request()->file('cat_image')->getClientOriginalExtension();
+                $extension1 = request()->file('cat_ban_image')->getClientOriginalExtension();
                 $filename21 = $filename . '_' . rand(11111, 99999) . '.' . $extension1;
-                request()->file('cat_image')->move($destinationpath, $filename21);
+                request()->file('cat_ban_image')->move($destinationpath, $filename21);
             }
         }
 

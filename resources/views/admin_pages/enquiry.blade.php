@@ -117,13 +117,6 @@
                                 {{ $enquiry->phone }}
                             </div>
 
-                            <div class="col-md-3 mt-2 mb-2">
-                                <b>Message :</b>
-                            </div>
-                            <div class="col-md-9 mt-2 mb-2">
-                                {{ $enquiry->message }}
-                            </div>
-
                         </div>
                     </div>
                     <!-- /.modal-content -->

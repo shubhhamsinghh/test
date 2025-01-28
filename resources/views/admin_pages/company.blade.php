@@ -84,22 +84,7 @@
                   <input type="text" class="form-control" id="youtube" placeholder="Social Media Link" name="c_sm3" value="<?php if(isset($company_info->comp_sm3)){echo $company_info->comp_sm3; } ?>" minlength="5" maxlength="200" >
                 </div>
               </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="twitter">Social Media [Twitter]</label>
-                  <input type="text" class="form-control" id="twitter" placeholder="Social Media Link" name="c_sm4" value="<?php if(isset($company_info->comp_sm4)){echo $company_info->comp_sm4; } ?>" minlength="5" maxlength="200" >
-                </div>
-              </div>
             </div>
-
-             <!-- <div class="col-md-6">
-                <div class="form-group">
-                  <label for="Textarea">Textarea</label>
-                  <textarea id="summernote" >Place <em>some</em> <u>text</u> <strong>here</strong></textarea>
-                </div>
-              </div> -->
-
-          
           </div>
           <div class="card-footer">
           <button type="submit" class="btn btn-primary float-right">Update</button>

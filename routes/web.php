@@ -16,12 +16,12 @@ use App\Http\Controllers\AdminController;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('index'); 
-// Route::get('thank_you', [HomeController::class, 'thank_you'])->name('thank_you');
-// Route::get('product/{cat_url}/{sub_cat?}/{product?}', [HomeController::class, 'get_product'])->name('home_get_product');
-// Route::get('contact-us', [HomeController::class, 'contact_us'])->name('contact');
-// Route::get('about-us', [HomeController::class, 'about_us'])->name('about');
-// Route::get('certification', [HomeController::class, 'certification'])->name('certification');
-// Route::post('contact_add', [HomeController::class, 'contact_add'])->name('contact_add');
+Route::get('about-us', [HomeController::class, 'about_us'])->name('about');
+Route::get('contact-us', [HomeController::class, 'contact_us'])->name('contact');
+Route::post('contact_add', [HomeController::class, 'contact_add'])->name('contact_add');
+Route::get('portfolio/{url}/{url2?}', [HomeController::class, 'portfolio'])->name('web_portfolio');
+Route::get('cinematography', [HomeController::class, 'cinematography'])->name('cinematography');
+Route::get('thank-you', [HomeController::class, 'thank_you'])->name('thank_you');
 
 Auth::routes();
 
