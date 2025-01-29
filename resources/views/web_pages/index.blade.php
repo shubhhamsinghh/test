@@ -167,7 +167,8 @@
                                             data-paddingright="[0,0,0,0]"
                                             data-paddingbottom="[0,0,0,0]"
                                             data-paddingleft="[0,0,0,0]"
-                                            style="z-index: 5; max-width: 100px; max-width: 100px; white-space: nowrap; font-size: 60px; line-height: 100px; font-weight: 700; color: #ffffff; letter-spacing: 15px;font-family: 'Muli', sans-serif;">Oberoi Production </div>
+                                            style="z-index: 5; max-width: 100px; max-width: 100px; white-space: nowrap; font-size: 60px; line-height: 100px; font-weight: 700; color: #ffffff; letter-spacing: 15px;font-family: 'Muli', sans-serif;">Oberoi Production 
+                                        </div>
                                     </li>
                                     <!-- SLIDE  -->
                                     <li data-index="rs-11" data-transition="fade" data-slotamount="default" data-hideafterloop="0" data-hideslideonmobile="off"  data-easein="default" data-easeout="default" data-masterspeed="default"  data-thumb="img/home-pro/slider/100x50_2-2.jpg"  data-rotate="0"  data-saveperformance="off"  data-title="Slide" data-param1="" data-param2="" data-param3="" data-param4="" data-param5="" data-param6="" data-param7="" data-param8="" data-param9="" data-param10="" data-description="">

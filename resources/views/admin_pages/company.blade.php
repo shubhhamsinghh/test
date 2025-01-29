@@ -66,13 +66,13 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="fb">Social Media [Facebook]</label>
-                  <input type="text" class="form-control" id="fb" placeholder="Social Media Link" name="c_sm1" value="<?php if(isset($company_info->comp_sm1)){echo $company_info->comp_sm1; } ?>" minlength="5" maxlength="200" >
+                  <input type="text" class="form-control" id="fb" placeholder="Social Media Link" name="c_sm1" value="<?php if(isset($company_info->comp_sm1)){echo $company_info->comp_sm1; } ?>" minlength="5">
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="insta">Social Media [Instagram]</label>
-                  <input type="text" class="form-control" id="insta" placeholder="Social Media Link" name="c_sm2" value="<?php if(isset($company_info->comp_sm2)){echo $company_info->comp_sm2; } ?>" minlength="5" maxlength="200" >
+                  <input type="text" class="form-control" id="insta" placeholder="Social Media Link" name="c_sm2" value="<?php if(isset($company_info->comp_sm2)){echo $company_info->comp_sm2; } ?>" minlength="5">
                 </div>
               </div>
             </div>
@@ -81,7 +81,14 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="youtube">Social Media [Youtube]</label>
-                  <input type="text" class="form-control" id="youtube" placeholder="Social Media Link" name="c_sm3" value="<?php if(isset($company_info->comp_sm3)){echo $company_info->comp_sm3; } ?>" minlength="5" maxlength="200" >
+                  <input type="text" class="form-control" id="youtube" placeholder="Social Media Link" name="c_sm3" value="<?php if(isset($company_info->comp_sm3)){echo $company_info->comp_sm3; } ?>" minlength="5">
+                </div>
+              </div>
+            
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="youtube">Social Media [Whatsapp]</label>
+                  <input type="text" class="form-control" id="Whatsapp" placeholder="Social Media Link" name="c_sm4" value="<?php if(isset($company_info->comp_sm3)){echo $company_info->comp_sm4; } ?>" minlength="5" >
                 </div>
               </div>
             </div>

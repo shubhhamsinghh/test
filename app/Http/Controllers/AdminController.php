@@ -67,6 +67,7 @@ class AdminController extends Controller
             'comp_sm1' => $request->c_sm1,
             'comp_sm2' => $request->c_sm2,
             'comp_sm3' => $request->c_sm3,
+            'comp_sm4' => $request->c_sm4,
         );
         $company_info = DB::table('company_info')->where('id',1)->update($company_info);
         $request->session()->flash('response_msg', 'Company Info updated successfully !!'); //success,info,error,warning

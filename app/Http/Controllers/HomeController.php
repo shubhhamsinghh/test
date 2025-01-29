@@ -30,12 +30,24 @@ class HomeController extends Controller
 
     public function cinematography()
     {
-        return view('web_pages.cinematography');
+        $data = DB::table('portfolio')->first();
+        $details = DB::table('port_details')->where('portfolio_id',$data->id)->get();
+        $tabs = DB::table('tabs')->get();
+        return view('web_pages.cinematography',compact('data','details','tabs'));
     }
 
     public function portfolio($url,$url2=null)
     {
-        return view('web_pages.portfolio');
+        if($url2 != null){
+            $data = Cat_Description::where('cat_dec_url',$url2)->first();
+            $details = DB::table('cat_des_images')->where('cat_des_id',$data->id)->get();
+            return view('web_pages.gallery',compact('details','data'));
+        }else{
+           $data = DB::table('category')->where('cat_url',$url)->first();
+           $details = Cat_Description::with('cat_images')->where('category_id',$data->id)->get();
+           return view('web_pages.portfolio',compact('details','data'));
+        }
+        
     }
 
     public function contact_us()
@@ -78,21 +90,4 @@ class HomeController extends Controller
         return view('web_pages.thank_you');
     }
 
-    public function get_product($cat_url, $sub_cat = Null, $product = Null)
-    {
-        if ($product != Null) {
-            $product = Product::with('category', 'sub_category')->where('prod_url', $product)->first();
-            return view('web_pages.product_detail', compact('product'));
-        } elseif ($sub_cat != Null) {
-            $sub_cat = Sub_Category::where('sub_cat_url', $sub_cat)->first();
-            $products = Product::with('category', 'sub_category')->where('sub_category_id', $sub_cat->id)->orderBy('id', 'desc')->get();
-            $categories = Category::where('id', '!=', $sub_cat->cat_id)->orderBy('cat_name')->get();
-            return view('web_pages.product_listing', compact('products', 'categories'));
-        } else {
-            $cat = Category::where('cat_url', $cat_url)->first();
-            $subCategories = Sub_Category::with('category')->where('cat_id', $cat->id)->orderBy('sr_no', 'asc')->get();
-            $categories = Category::where('cat_url', '!=', $cat_url)->orderBy('cat_name')->get();
-            return view('web_pages.category', compact('subCategories', 'categories', 'cat'));
-        }
-    }
 }

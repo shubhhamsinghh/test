@@ -135,12 +135,12 @@
                                 <input type="file" name="cat_ban_image" id="cat_ban_image" class="form-control" required>
                             </div>
                         </div>
-                        <div class="col-md-12">
+                        <!-- <div class="col-md-12">
                             <div class="form-group">
                                 <label for="cat_description">Description</label>
                                 <textarea name="cat_description" class="form-control" id="cat_description" row="3"></textarea>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="cat_detail_des">Detail Description</label>
@@ -206,7 +206,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="cat_ban_image">Banner Image</label>
-                                <input type="file" name="cat_ban_image" id="cat_ban_image" class="form-control" required>
+                                <input type="file" name="cat_ban_image" id="cat_ban_image" class="form-control">
                                 <?php if (isset($category->cat_ban_image)) { ?>
                                     <img src="{{ asset('images/category/' . $category->cat_ban_image) }}"
                                         style="height:100px;" class="img-responsive">
@@ -214,12 +214,12 @@
                             </div>
                         </div>
 
-                        <div class="col-md-12">
+                        <!-- <div class="col-md-12">
                             <div class="form-group">
                                 <label for="description">Description</label>
                                 <textarea name="cat_description" class="form-control" id="cat_description" row="3">{{ $category->cat_description}}</textarea>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="col-md-12">
                             <div class="form-group">

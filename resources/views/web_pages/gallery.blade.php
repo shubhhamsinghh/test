@@ -1,19 +1,19 @@
 @extends('layouts.web_layout')
 @section('header')
-<title>Gallery - Oberoi Production</title>
+{!! $data->cat_dec_meta !!}
 @endsection
 @section('content')
 <div class="page-content">
             <!-- Breadcamb Area Start -->
-            <section class="breadcamb-area bg-17 bg-overlay-1">
+            <section class="breadcamb-area bg-overlay-1" style="background: url({{asset('images/category/'.$data->cat_des_ban_image)}})">
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="bradcamb-content text-center text-white text-uppercase">
-                                <h1>GALLERY</h1>
+                                <h1>{{strtoupper($data->cat_dec_heading)}}</h1>
                                 <ul>
                                     <li><a href="{{route('index')}}">HOME <span>/</span></a></li>
-                                    <li>GALLERY</li>
+                                    <li>{{strtoupper($data->cat_dec_heading)}}</li>
                                 </ul>	
                             </div>
                         </div>
@@ -28,96 +28,18 @@
                         <!-- Latest Shot/Portfolio Menu Tab -->
                         <div class="grid gallery-box">
                             <div class="gallery-content row">
+                                @foreach($details as $d)
                                 <div class="grid-item col-lg-4 col-md-6 col-sm-12 c1">
                                     <!-- Latest Shot/Portfolio Single -->
                                     <div class="gallery-single">
                                         <div class="gallery-image">
-                                            <img src="img/home-two/gallery/1.png" alt="">
-                                            <a href="img/home-two/gallery/1.png" class="popup-gallery"><i class="icofont-search"></i></a>
+                                            <img src="{{asset('images/category-detail/'.$d->cat_des_cimg)}}" alt="">
+                                            <a href="{{asset('images/category-detail/'.$d->cat_des_cimg)}}" class="popup-gallery"><i class="icofont-search"></i></a>
                                         </div>
                                     </div>
                                     <!-- Latest Shot/Portfolio Single -->
                                 </div>
-                                <div class="grid-item col-lg-4 col-md-6 col-sm-12 c2 c4">
-                                    <!-- Latest Shot/Portfolio Single -->
-                                    <div class="gallery-single">
-                                        <div class="gallery-image">
-                                            <img src="img/home-two/gallery/2.png" alt="">
-                                            <a href="img/home-two/gallery/2.png" class="popup-gallery"><i class="icofont-search"></i></a>
-                                        </div>
-                                    </div>
-                                    <!-- Latest Shot/Portfolio Single -->
-                                </div>
-                                <div class="grid-item col-lg-4 col-md-6 col-sm-12 c1 c3 c5">
-                                    <!-- Latest Shot/Portfolio Single -->
-                                    <div class="gallery-single">
-                                        <div class="gallery-image">
-                                            <img src="img/home-two/gallery/3.png" alt="">
-                                            <a href="img/home-two/gallery/3.png" class="popup-gallery"><i class="icofont-search"></i></a>
-                                        </div>
-                                    </div>
-                                    <!-- Latest Shot/Portfolio Single -->
-                                </div>
-                                <div class="grid-item col-lg-4 col-md-6 col-sm-12 c1 c3 c5">
-                                    <!-- Latest Shot/Portfolio Single -->
-                                    <div class="gallery-single">
-                                        <div class="gallery-image">
-                                            <img src="img/home-two/gallery/4.png" alt="">
-                                            <a href="img/home-two/gallery/4.png" class="popup-gallery"><i class="icofont-search"></i></a>
-                                        </div>
-                                    </div>
-                                    <!-- Latest Shot/Portfolio Single -->
-                                </div>
-                                <div class="grid-item col-lg-4 col-md-6 col-sm-12 c1 c3 c5">
-                                    <!-- Latest Shot/Portfolio Single -->
-                                    <div class="gallery-single">
-                                        <div class="gallery-image">
-                                            <img src="img/home-two/gallery/5.png" alt="">
-                                            <a class="popup-youtube" href="www.youtube.com/watch1e86.html?v=TLnmb07WQ-s"><i class="icofont icofont-play-alt-2"></i></a>
-                                        </div>
-                                    </div>
-                                    <!-- Latest Shot/Portfolio Single -->
-                                </div>
-                                <div class="grid-item col-lg-4 col-md-6 col-sm-12 c1 c3 c5">
-                                    <!-- Latest Shot/Portfolio Single -->
-                                    <div class="gallery-single">
-                                        <div class="gallery-image">
-                                            <img src="img/home-two/gallery/6.png" alt="">
-                                            <a class="popup-youtube" href="www.youtube.com/watch1e86.html?v=TLnmb07WQ-s"><i class="icofont icofont-play-alt-2"></i></a>
-                                        </div>
-                                    </div>
-                                    <!-- Latest Shot/Portfolio Single -->
-                                </div>
-                                <div class="grid-item col-lg-4 col-md-6 col-sm-12 c1 c3 c5">
-                                    <!-- Latest Shot/Portfolio Single -->
-                                    <div class="gallery-single">
-                                        <div class="gallery-image">
-                                            <img src="img/home-two/gallery/7.png" alt="">
-                                            <a href="img/home-two/gallery/7.png" class="popup-gallery"><i class="icofont-search"></i></a>
-                                        </div>
-                                    </div>
-                                    <!-- Latest Shot/Portfolio Single -->
-                                </div>
-                                <div class="grid-item col-lg-4 col-md-6 col-sm-12 c1 c3 c5">
-                                    <!-- Latest Shot/Portfolio Single -->
-                                    <div class="gallery-single">
-                                        <div class="gallery-image">
-                                            <img src="img/home-two/gallery/8.png" alt="">
-                                            <a class="popup-youtube" href="www.youtube.com/watch1e86.html?v=TLnmb07WQ-s"><i class="icofont icofont-play-alt-2"></i></a>
-                                        </div>
-                                    </div>
-                                    <!-- Latest Shot/Portfolio Single -->
-                                </div>
-                                <div class="grid-item col-lg-4 col-md-6 col-sm-12 c1 c3 c5">
-                                    <!-- Latest Shot/Portfolio Single -->
-                                    <div class="gallery-single">
-                                        <div class="gallery-image">
-                                            <img src="img/home-two/gallery/9.png" alt="">
-                                            <a href="img/home-two/gallery/9.png" class="popup-gallery"><i class="icofont-search"></i></a>
-                                        </div>
-                                    </div>
-                                    <!-- Latest Shot/Portfolio Single -->
-                                </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>

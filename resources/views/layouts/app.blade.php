@@ -23,7 +23,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/login') }}"> Test
-                    <!-- <img src="{{ asset('admin_assets/images/logo.png') }}" style="height: 40px;"> -->
+                    <img src="{{ asset('img/home-one/icon/logo.png') }}" style="height: 40px;">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"

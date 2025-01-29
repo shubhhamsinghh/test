@@ -37,7 +37,7 @@
                                                 <a href="{{route('index')}}">Home</a>
 											</li>
 											<li class="{{ request()->route()->getName() == 'about' ? 'active' : '' }}"><a href="{{route('about')}}">About</a></li>
-											<li class="{{ request()->route()->getName() == 'web_portfolio' ? 'active' : '' }}"><a href="#">Portfolio</a>
+											<li class="{{ request()->route()->getName() == 'web_portfolio' ? 'active' : '' }} {{ request()->route()->getName() == 'cinematography' ? 'active' : '' }}"><a href="#">Portfolio</a>
 												<ul>
 												   @foreach($categories as $category)
 												   <li  class="{{ request()->route()->getName() == 'web_portfolio' ? 'active' : '' }}"><a href="{{route('web_portfolio',['url' => $category->cat_url])}}">{{$category->cat_name}}</a></li>

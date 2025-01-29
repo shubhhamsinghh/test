@@ -241,7 +241,7 @@
 
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label for="p_imge">Image</label>
+                                        <label for="p_imge">Banner Image</label>
                                         <input type="file" class="form-control" name="p_image"
                                             id="p_imge">
                                         <?php if(isset($data->p_image)){ ?>
@@ -250,12 +250,12 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-12">
+                                <!-- <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="p_description">Description</label>
                                         <textarea class="form-control" name="p_description" id="p_description" rows="5">{{ $data->p_description }}</textarea>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="col-md-12">
                                     <div class="form-group">
