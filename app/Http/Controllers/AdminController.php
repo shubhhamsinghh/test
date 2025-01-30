@@ -36,6 +36,7 @@ class AdminController extends Controller
     }
     public function update_password(Request $request)
     {
+        $id = Auth::user()->id;
         $password = $request->password;
         $con_password = $request->confirm_password;
         if ($password !== $con_password) {
@@ -44,7 +45,7 @@ class AdminController extends Controller
             return redirect()->back();
         } else {
             $newPassword = Hash::make($password);
-            DB::table('users')->where('id', 1)->update(['password' => $newPassword]);
+            DB::table('users')->where('id', $id)->update(['password' => $newPassword]);
             $request->session()->flash('response_msg', 'Password updated successfully !!');
             $request->session()->flash('response_type', 'success');
             return redirect()->back();
